@@ -1,0 +1,2478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reprogramming v3 Resilience Training Program</title>
+    <style>
+        /* Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 50%, #ff6b6b 100%);
+            min-height: 100vh;
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 20px;
+            max-width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Desktop Layout */
+        @media (min-width: 769px) {
+            body { padding: 0; }
+            .container {
+                display: grid;
+                grid-template-columns: 280px 1fr;
+                gap: 30px;
+                padding: 30px;
+                max-width: 1400px;
+            }
+        }
+
+        /* Mobile Layout Adjustments */
+        @media (max-width: 768px) {
+            .container { padding: 15px; gap: 25px; margin-top: 70px; }
+            body { padding: 0; font-size: 16px; }
+            .main-content { padding: 20px; }
+            .routine-header { flex-direction: column; align-items: flex-start; }
+            .routine-actions { margin-top: 10px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 10px; gap: 20px; }
+            .nav-menu button { font-size: 16px; padding: 15px; }
+            .form-group input, .form-group textarea, .form-group select { font-size: 16px; padding: 15px; }
+            .btn-primary { font-size: 14px; padding: 18px; }
+        }
+
+        /* Performance optimizations */
+        .virtual-scroll-container { max-height: 400px; overflow-y: auto; }
+        .virtual-item { padding: 10px; border-bottom: 1px solid #e0e6ff; }
+        .loading-indicator { display: none; text-align: center; padding: 20px; color: #667eea; }
+        .loading-indicator.show { display: block; }
+
+        /* Enhanced UX - DOPAMINE SEARCH */
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+            transform: scale(1);
+            transition: all 0.3s ease;
+        }
+        .search-container:focus-within {
+            transform: scale(1.02);
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 3px solid #ff7e5f;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            color: #ff7e5f;
+            box-shadow: 0 4px 15px rgba(255, 126, 95, 0.2);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #ffd700, #ffecb3);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+        .search-input::placeholder {
+            color: #ff7e5f;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        .search-clear {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+        }
+        .search-clear:hover {
+            background: linear-gradient(135deg, #ff3838, #ff4757);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.5);
+        }
+
+        /* DOPAMINE SEARCH RESULTS */
+        .search-results-info {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+        .search-results-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .search-results-info.motivational {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+            animation: pulse 2s infinite;
+        }
+        .search-results-info.excited {
+            background: linear-gradient(135deg, #E91E63, #AD1457);
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+            40%, 43% { transform: translateY(-10px); }
+            70% { transform: translateY(-5px); }
+            90% { transform: translateY(-2px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; background: #4CAF50; color: white; z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease; }
+        .notification.show { transform: translateX(0); }
+        .notification.error { background: #f44336; }
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltip-text { visibility: hidden; width: 200px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -100px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .sidebar h1 { font-size: 24px; margin-bottom: 20px; background: linear-gradient(135deg, #ff7e5f, #feb47b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; }
+        .nav-menu { list-style: none; padding: 0; margin-bottom: 20px; }
+        .nav-menu li { margin-bottom: 10px; }
+        .nav-menu button { display: block; width: 100%; padding: 18px; border: none; border-radius: 15px; background: #ffecb3; color: #ff7e5f; font-size: 20px; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.3s ease; min-height: 60px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .nav-menu button:hover { background: #ffd700; transform: scale(1.05); }
+        .nav-menu button.active { background: linear-gradient(135deg, #ff7e5f, #feb47b); color: white; box-shadow: 0 6px 15px rgba(255, 126, 95, 0.4); }
+        .main-content { background: rgba(255, 255, 255, 0.95); border-radius: 25px; padding: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); backdrop-filter: blur(15px); border: 2px solid rgba(255, 126, 95, 0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #ffd700; padding-bottom: 10px; }
+        .section-header h2 { color: #333; font-size: 26px; }
+        .motivation-quote { text-align: center; font-style: italic; color: #ff7e5f; font-size: 18px; margin: 20px 0; padding: 15px; background: rgba(255, 236, 179, 0.5); border-radius: 10px; }
+        .progress-section { margin-bottom: 25px; padding: 20px; background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 15px; border: 1px solid rgba(255, 126, 95, 0.1); }
+        .progress-stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .progress-bar { height: 10px; background: #ffecb3; border-radius: 5px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff7e5f, #feb47b); width: 0%; transition: width 0.5s ease; }
+        .next-routine-display { margin-top: 15px; padding: 10px; background: #ffecb3; border-radius: 10px; font-size: 13px; text-align: center; color: #ff7e5f; font-weight: 600; }
+        .add-routine-form, .add-rule-form { background: #fff8e1; padding: 20px; border-radius: 15px; border: 1px solid rgba(255, 126, 95, 0.1); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 15px; border: 2px solid #ffecb3; border-radius: 8px; font-size: 16px; transition: border-color 0.3s ease; min-height: 50px; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #ff7e5f; }
+        .days-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+        .day-checkbox { display: flex; align-items: center; font-size: 12px; }
+        .day-checkbox input { width: auto; margin-right: 5px; }
+        .micro-steps { margin-top: 10px; }
+        .micro-step { display: flex; align-items: center; margin-bottom: 8px; padding: 8px; background: white; border-radius: 6px; }
+        .micro-step input { flex: 1; border: none; background: transparent; padding: 4px; }
+        .remove-step { background: #ff4757; color: white; border: none; border-radius: 4px; width: 24px; height: 24px; cursor: pointer; margin-left: 8px; font-size: 12px; }
+        .add-step { background: #ff7e5f; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #ff7e5f, #feb47b); color: white; border: none; padding: 18px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; width: 100%; margin-top: 10px; transition: transform 0.2s ease; min-height: 50px; }
+        .btn-primary:hover { transform: translateY(-1px); }
+        .routines-list { display: flex; flex-direction: column; gap: 15px; }
+        .routine-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); border: 2px solid transparent; transition: all 0.3s ease; position: relative; }
+        .routine-card.completed { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: white; border-color: #00d2ff; }
+        .routine-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
+        .routine-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .routine-title { font-size: 18px; font-weight: 600; margin-bottom: 5px; display: flex; align-items: center; }
+        .routine-title .edit-icon { margin-left: 5px; cursor: pointer; font-size: 14px; color: #ff7e5f; }
+        .routine-card.completed .routine-title .edit-icon { color: white; }
+        .routine-time { font-size: 14px; opacity: 0.8; display: flex; align-items: center; }
+        .routine-time .edit-icon { margin-left: 5px; cursor: pointer; font-size: 12px; color: #ff7e5f; }
+        .routine-card.completed .routine-time .edit-icon { color: white; }
+        .routine-actions { display: flex; gap: 8px; align-items: center; }
+        .three-dot-menu { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
+        .routine-card.completed .three-dot-menu { color: white; }
+        .complete-btn { width: 24px; height: 24px; border: 2px solid #667eea; border-radius: 50%; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.3s ease; }
+        .complete-btn.completed { background: #00b894; border-color: #00b894; color: white; }
+        .routine-card.completed .complete-btn { background: rgba(255, 255, 255, 0.2); border-color: white; color: white; }
+        .delete-btn { background: #ff4757; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 12px; }
+        .routine-description { margin-bottom: 15px; line-height: 1.5; }
+        .routine-category { display: inline-block; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; }
+        .routine-card.completed .routine-category { background: rgba(255, 255, 255, 0.2); color: white; }
+        .routine-progress { margin-bottom: 15px; }
+        .routine-progress-bar { height: 6px; background: rgba(102, 126, 234, 0.2); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+        .routine-progress-fill { height: 100%; background: #667eea; transition: width 0.3s ease; }
+        .routine-card.completed .routine-progress-bar { background: rgba(255, 255, 255, 0.2); }
+        .routine-card.completed .routine-progress-fill { background: white; }
+        .micro-steps-container { display: none; margin-top: 15px; }
+        .micro-steps-container.expanded { display: block; animation: slideDown 0.3s ease; }
+        .micro-step-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05); position: relative; }
+        .routine-card.completed .micro-step-item { border-bottom-color: rgba(255, 255, 255, 0.1); }
+        .micro-step-checkbox { margin-right: 10px; }
+        .micro-step-text { flex: 1; font-size: 14px; }
+        .micro-step-text.completed { text-decoration: line-through; opacity: 0.6; }
+        .micro-step-actions { margin-left: 10px; }
+        .micro-step-actions button { background: none; border: none; font-size: 16px; cursor: pointer; color: #667eea; }
+        .routine-card.completed .micro-step-actions button { color: white; }
+        .micro-step-journal-container { display: none; margin-top: 5px; padding: 5px 0 5px 30px; }
+        .micro-step-journal-container.expanded { display: block; }
+        .micro-step-journal-container textarea { width: 100%; min-height: 40px; padding: 8px; border: 1px solid #e0e6ff; border-radius: 6px; font-size: 13px; resize: vertical; }
+        .routine-card.completed .micro-step-journal-container textarea { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); color: white; }
+        .routine-card.completed .micro-step-journal-container textarea::placeholder { color: rgba(255, 255, 255, 0.7); }
+        .journal-container { display: none; margin-top: 15px; }
+        .journal-container.expanded { display: block; animation: slideDown 0.3s ease; }
+        .journal-textarea { width: 100%; min-height: 80px; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; resize: vertical; font-family: inherit; font-size: 14px; }
+        .routine-card.completed .journal-textarea { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); color: white; }
+        .routine-card.completed .journal-textarea::placeholder { color: rgba(255, 255, 255, 0.7); }
+        .routine-card .micro-step-edit-container { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); }
+        .routine-card.completed .micro-step-edit-container { display: none; }
+        .routine-card .micro-step-edit-item { display: flex; align-items: center; margin-bottom: 8px; }
+        .routine-card .micro-step-edit-item input[type="text"] { flex: 1; padding: 6px 8px; border: 1px solid #e0e6ff; border-radius: 6px; font-size: 13px; }
+        .routine-card .micro-step-edit-item .remove-step { margin-left: 8px; background: #ff4757; color: white; border: none; border-radius: 4px; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
+        .routine-card .add-step-btn { background: #667eea; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; margin-top: 5px; }
+        .routine-card .reopen-btn { background: #ffc107; color: #333; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 10px; }
+        .routine-streak { font-size: 12px; font-weight: 600; color: #ff9800; margin-left: 10px; display: inline-flex; align-items: center; gap: 3px; }
+        .routine-card.completed .routine-streak { color: white; }
+        .daily-routines-section { margin-top: 30px; margin-bottom: 20px; }
+        .daily-routines-section h3 { color: #667eea; margin-bottom: 15px; font-size: 20px; border-bottom: 2px solid #e0e6ff; padding-bottom: 5px; }
+        .daily-routines-section .routines-list { gap: 10px; }
+        .pain-drills-section { margin-top: 30px; margin-bottom: 20px; }
+        .pain-drills-section h3 { color: #ff4757; margin-bottom: 15px; font-size: 20px; border-bottom: 2px solid #ffc107; padding-bottom: 5px; }
+        .pain-drills-section .routines-list { gap: 10px; }
+        .pain-drills-section .safety-warning { background-color: #ffdddd; color: #d8000c; padding: 10px; text-align: center; font-weight: bold; border-radius: 8px; margin-bottom: 20px; border: 1px solid #d8000c; }
+        .micro-variant-container { display: none; margin-top: 15px; padding: 10px; background: #e0e6ff; border-radius: 10px; font-size: 13px; color: #667eea; font-weight: 600; }
+        .micro-variant-container.expanded { display: block; animation: slideDown 0.3s ease; }
+        .routine-card.completed .micro-variant-container { background: rgba(255, 255, 255, 0.1); color: white; }
+        .suds-input-group { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .suds-input-group label { flex: 1; min-width: 100px; display: flex; flex-direction: column; font-size: 12px; font-weight: normal; color: #555; }
+        .suds-input-group input[type="number"] { width: 100%; padding: 6px; border-radius: 6px; border: 1px solid #e0e6ff; font-size: 13px; }
+        .suds-input-group input[type="number"]:focus { border-color: #667eea; outline: none; }
+        .routine-card.completed .suds-input-group input { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); color: white; }
+        .routine-card.completed .suds-input-group label { color: rgba(255, 255, 255, 0.8); }
+        .history-day { margin-bottom: 15px; border: 1px solid #e0e6ff; border-radius: 10px; overflow: hidden; }
+        .history-day-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9ff; cursor: pointer; font-size: 18px; font-weight: 600; color: #667eea; border-bottom: 1px solid #e0e6ff; }
+        .history-day-header.expanded { border-bottom: none; }
+        .history-day-header .toggle-icon { transition: transform 0.3s ease; }
+        .history-day-header.expanded .toggle-icon { transform: rotate(90deg); }
+        .history-day-content { display: none; padding: 15px; animation: slideDown 0.3s ease; }
+        .history-day-content.expanded { display: block; }
+        .history-routine { background: #f8f9ff; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #ddd; }
+        .history-routine.completed { background: #e8f5e8; border-left-color: #00b894; }
+        .history-routine.incomplete { background: #fff0f0; border-left-color: #ff4757; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #666; }
+        .empty-state h3 { margin-bottom: 10px; }
+        .load-more-history { display: block; width: fit-content; margin: 20px auto 0; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .dashboard-stat-item { background: white; padding: 10px 15px; border-radius: 10px; border: 1px solid #e0e6ff; font-size: 13px; }
+        .dashboard-stat-item strong { display: block; font-size: 18px; color: #667eea; margin-bottom: 5px; }
+        .suds-dashboard table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 15px; }
+        .suds-dashboard th, .suds-dashboard td { border: 1px solid #e0e6ff; padding: 8px; text-align: left; }
+        .suds-dashboard th { background: #e0e6ff; font-weight: 600; color: #667eea; }
+        .suds-dashboard tr:nth-child(even) { background: #f8f9ff; }
+        .dopamine-trigger { background: linear-gradient(45deg, #ff7e5f, #feb47b); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); } 50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); } 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); } }
+
+        /* Confetti Animation */
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000; }
+        .confetti-piece { position: absolute; width: 10px; height: 10px; background: #ffd700; animation: fall 3s linear infinite; }
+        .confetti-piece:nth-child(odd) { background: #ff7e5f; }
+        .confetti-piece:nth-child(3n) { background: #feb47b; }
+        .confetti-piece:nth-child(5n) { background: #4CAF50; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+
+        /* Enhanced streak animation */
+        .streak-pulse { animation: streakPulse 0.5s ease; }
+        @keyframes streakPulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); color: #ffd700; } 100% { transform: scale(1); } }
+        .category-management { margin-top: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px; }
+        .category-input-group { display: flex; gap: 8px; margin-bottom: 10px; }
+        .category-input-group input { flex: 1; }
+        .category-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .category-tag { display: flex; align-items: center; background: #667eea; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; }
+        .delete-category { background: none; border: none; color: white; margin-left: 4px; cursor: pointer; font-size: 10px; }
+        .on-call-scripts { margin-top: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px; }
+        .on-call-scripts h3 { margin-bottom: 10px; color: #667eea; }
+        .on-call-scripts ul { list-style: none; padding: 0; }
+        .on-call-scripts li { background: white; padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; border: 1px solid #e0e6ff; }
+        .adaptive-intensity-rule { margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 10px; border: 1px solid #ffcc80; font-size: 12px; color: #e65100; }
+        .adaptive-intensity-rule h4 { margin-bottom: 5px; color: #e65100; }
+        .tracker-settings { margin-top: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px; }
+        .tracker-settings h3 { margin-bottom: 10px; color: #667eea; }
+        .tracker-settings .form-group { margin-bottom: 10px; }
+        .tracker-settings .btn { margin-top: 10px; }
+        .undo-redo-buttons { margin-top: 20px; display: flex; gap: 8px; }
+        .undo-redo-buttons .btn { flex: 1; background: #9E9E9E; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .undo-redo-buttons .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .data-management-buttons { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+        .data-management-buttons .btn { background: #4CAF50; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .data-management-buttons .btn.import { background: #2196F3; }
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-input-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        .clear-buttons { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+        .btn-danger { background: #ff4757; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .last-saved-timestamp { font-size: 11px; color: #777; text-align: center; margin-top: 15px; }
+        .today-sub-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #e0e6ff; padding-bottom: 10px; }
+        .today-sub-tabs button { padding: 8px 15px; border: 1px solid #e0e6ff; border-radius: 8px; background: #f8f9ff; color: #667eea; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .today-sub-tabs button.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-color: #667eea; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2); }
+        .today-sub-tabs button:hover:not(.active) { background: #e0e6ff; }
+        .rules-list { display: flex; flex-direction: column; gap: 15px; }
+        .rule-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); border: 1px solid #e0e6ff; }
+        .rule-card h4 { font-size: 18px; margin-bottom: 10px; color: #333; }
+        .rule-card p { font-size: 14px; line-height: 1.5; color: #555; }
+        .rule-card .rule-actions { margin-top: 15px; text-align: right; }
+        .pain-drills-filters { display: flex; gap: 10px; margin-bottom: 20px; }
+        .pain-drills-filters button { padding: 8px 15px; border: 1px solid #ffc107; border-radius: 8px; background: #fff3e0; color: #e65100; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .pain-drills-filters button.active { background: linear-gradient(135deg, #ffc107, #ff9800); color: white; border-color: #ff9800; box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2); }
+        .pain-drills-filters button:hover:not(.active) { background: #ffe0b2; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Mobile Header Styles */
+        .mobile-header {
+            display: none; /* Hidden by default, shown on mobile */
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Space out title and hamburger */
+        }
+        .motivational-title {
+            color: white;
+            font-size: 20px;
+            margin: 0;
+            text-align: center;
+            font-weight: bold;
+            flex-grow: 1; /* Allow title to take available space */
+        }
+        .hamburger-menu {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 5px; /* Add padding for easier tapping */
+        }
+        .hamburger-menu span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .mobile-menu-overlay.show {
+            display: flex;
+        }
+        .mobile-menu-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            width: 95%;
+            max-width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ffecb3;
+        }
+
+        .mobile-menu-title {
+            color: #ff7e5f;
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .mobile-menu-close {
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+        }
+
+        .mobile-menu-close:hover {
+            background: #ff3838;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.5);
+        }
+
+        .completed-tasks {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 126, 95, 0.1);
+        }
+
+        .completed-tasks h3 {
+            color: #ff7e5f;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .completed-tasks-list {
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .completed-task-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 126, 95, 0.1);
+            color: #d63384;
+            font-weight: 500;
+        }
+
+        .completed-task-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav-section {
+            margin-bottom: 25px;
+        }
+
+        .mobile-nav-section h4 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .mobile-nav-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-nav-tabs button {
+            display: block;
+            width: 100%;
+            padding: 18px 20px;
+            margin-bottom: 0;
+            background: linear-gradient(135deg, #ffecb3, #ffd700);
+            border: none;
+            border-radius: 15px;
+            color: #ff7e5f;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 60px;
+            box-shadow: 0 3px 10px rgba(255, 126, 95, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-tabs button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .mobile-nav-tabs button:hover::before {
+            left: 100%;
+        }
+
+        .mobile-nav-tabs button:hover {
+            background: linear-gradient(135deg, #ffd700, #ffecb3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 126, 95, 0.3);
+        }
+
+        .mobile-nav-tabs button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(255, 126, 95, 0.2);
+        }
+
+        .mobile-nav-tabs button:focus {
+            outline: 3px solid rgba(255, 126, 95, 0.5);
+            outline-offset: 2px;
+        }
+
+        .mobile-nav-stats {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .mobile-nav-stats p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        /* Show mobile header and hide sidebar on small screens */
+        @media (max-width: 768px) {
+            .mobile-header { display: flex; }
+            .sidebar { display: none; }
+        }
+
+        /* Sub-tab content display */
+        .sub-tab-content {
+            display: none;
+        }
+        .sub-tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification container -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <h1 class="motivational-title">Build Unbreakable Resilience</h1>
+        <div class="hamburger-menu" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <h2 class="mobile-menu-title">Resilience Hub</h2>
+                <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+            </div>
+
+            <div class="completed-tasks">
+                <h3>Today's Victories</h3>
+                <div class="completed-tasks-list" id="mobile-completed-list">
+                    <div class="completed-task-item">No completed tasks yet</div>
+                </div>
+            </div>
+
+            <div class="mobile-nav-section">
+                <h4>Navigation</h4>
+                <div class="mobile-nav-tabs">
+                    <button onclick="showTab('today-routines'); toggleMobileMenu()">Today's Routines</button>
+                    <button onclick="showTab('add-routine'); toggleMobileMenu()">Add New Routine/Rule</button>
+                    <button onclick="showTab('dashboard'); toggleMobileMenu()">Dashboard</button>
+                    <button onclick="showTab('history'); toggleMobileMenu()">History</button>
+                    <button onclick="showTab('settings'); toggleMobileMenu()">Settings & Data</button>
+                </div>
+            </div>
+
+            <div class="mobile-nav-stats">
+                <p><strong>Progress:</strong> <span id="mobile-progress-rate">0%</span></p>
+                <p><strong>Completed:</strong> <span id="mobile-completed-count">0</span></p>
+                <p><strong>Streaks:</strong> <span id="mobile-streak-count">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h1>Reprogramming v3</h1>
+            <ul class="nav-menu">
+                <li><button class="nav-button active" data-tab="today-routines">Today's Routines</button></li>
+                <li><button class="nav-button" data-tab="add-routine">Add New Routine/Rule</button></li>
+                <li><button class="nav-button" data-tab="dashboard">Dashboard</button></li>
+                <li><button class="nav-button" data-tab="history">History</button></li>
+                <li><button class="nav-button" data-tab="settings">Settings & Data</button></li>
+            </ul>
+            <div class="progress-section">
+                <div class="progress-stat"><span>Total Routines:</span><span id="totalRoutines">0</span></div>
+                <div class="progress-stat"><span>Completed:</span><span id="completedRoutines">0</span></div>
+                <div class="progress-stat"><span>Success Rate:</span><span id="successRate">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                <div class="dashboard-stats">
+                    <div class="dashboard-stat-item"><strong><span id="totalStreaks">0</span></strong><span>Total Streaks</span></div>
+                    <div class="dashboard-stat-item"><strong><span id="painDrillExposureRate">0%</span></strong><span>Pain Drill Exposure (7 days)</span></div>
+                </div>
+            </div>
+            <div class="next-routine-display" id="nextRoutineDisplay">No upcoming routines.</div>
+            <div class="last-saved-timestamp" id="lastSavedTimestamp">Last Saved: Never</div>
+        </div>
+        <div class="main-content">
+            <div id="today-routines" class="tab-content active">
+                <div class="section-header">
+                    <h2>Today's Routines</h2>
+                    <div class="dopamine-trigger">Dopamine Rush! Complete routines and unleash your motivation surge!</div>
+                </div>
+                <div class="motivation-quote">"Every small step builds unbreakable resilience. Keep going!"</div>
+                <div class="today-sub-tabs">
+                    <button class="sub-tab-button active" data-sub-tab="rules" onclick="setTodaySubTab('rules')">Rules</button>
+                    <button class="sub-tab-button" data-sub-tab="pain-drills" onclick="setTodaySubTab('pain-drills')">Pain Drills</button>
+                    <button class="sub-tab-button" data-sub-tab="daily" onclick="setTodaySubTab('daily')">Daily</button>
+                    <button class="sub-tab-button" data-sub-tab="weekly" onclick="setTodaySubTab('weekly')">Weekly</button>
+                    <button class="sub-tab-button" data-sub-tab="monthly" onclick="setTodaySubTab('monthly')">Monthly</button>
+                    <button class="sub-tab-button" data-sub-tab="other" onclick="setTodaySubTab('other')">Other</button>
+                </div>
+                <div id="rules-sub-tab-content" class="sub-tab-content active"><div class="rules-list" id="rulesList"></div></div>
+                <div id="pain-drills-sub-tab-content" class="sub-tab-content">
+                    <div class="pain-drills-filters">
+                        <button class="pain-drills-filter-btn active" data-filter="active-today" onclick="setPainDrillsFilter('active-today')">Active Today</button>
+                        <button class="pain-drills-filter-btn" data-filter="all" onclick="setPainDrillsFilter('all')">All Pain Drills</button>
+                    </div>
+                    <div class="safety-warning">⚠️ If you experience panic, dissociation, or suicidal thoughts during exposure, STOP and contact a clinician immediately.</div>
+                    <div class="routines-list" id="painDrillsRoutines"></div>
+                </div>
+                <div id="daily-sub-tab-content" class="sub-tab-content"><div class="routines-list" id="dailyRoutinesList"></div></div>
+                <div id="weekly-sub-tab-content" class="sub-tab-content">
+                    <div class="pain-drills-filters">
+                        <button class="pain-drills-filter-btn active" data-filter="active-today" onclick="setWeeklyFilter('active-today')">Active Today</button>
+                        <button class="pain-drills-filter-btn" data-filter="all" onclick="setWeeklyFilter('all')">All</button>
+                    </div>
+                    <div class="routines-list" id="weeklyRoutinesList"></div>
+                </div>
+                <div id="monthly-sub-tab-content" class="sub-tab-content">
+                    <div class="pain-drills-filters">
+                        <button class="pain-drills-filter-btn active" data-filter="active-today" onclick="setMonthlyFilter('active-today')">Active Today</button>
+                        <button class="pain-drills-filter-btn" data-filter="all" onclick="setMonthlyFilter('all')">All</button>
+                    </div>
+                    <div class="routines-list" id="monthlyRoutinesList"></div>
+                </div>
+                <div id="other-sub-tab-content" class="sub-tab-content"><div class="routines-list" id="otherRoutinesList"></div></div>
+            </div>
+            <div id="add-routine" class="tab-content">
+                <div class="section-header"><h2>Add New Routine</h2></div>
+                <form class="add-routine-form" id="addRoutineForm">
+                    <div class="form-group"><label for="routineTitle">Title *</label><input type="text" id="routineTitle" required></div>
+                    <div class="form-group"><label for="routineTime">Time (Optional for trigger-based)</label><input type="time" id="routineTime"></div>
+                    <div class="form-group"><label for="routineDescription">Description *</label><textarea id="routineDescription" rows="3" required></textarea></div>
+                    <div class="form-group"><label for="routineCategory">Category</label><select id="routineCategory"><option value="">No Category</option></select></div>
+                    <div class="form-group"><label for="routinePainTag">Challenge Tag (e.g., Insult, Seduction)</label><input type="text" id="routinePainTag"></div>
+                    <div class="form-group"><label for="resetFrequency">Reset Frequency</label><select id="resetFrequency"><option value="manual">Manual</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div>
+                    <div class="form-group" id="daysSelectorGroup" style="display: none;"><label>Select Days (for Daily/Weekly/Monthly)</label><div class="days-selector" id="daysSelector"></div></div>
+                    <div class="form-group"><label for="organizeSection">Organize Section</label><select id="organizeSection"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option><option value="pain-drills">Pain Drills</option><option value="other">Other</option></select></div>
+                    <div class="form-group"><label>Micro-steps</label><div class="micro-steps" id="microSteps"></div><button type="button" class="add-step" onclick="addMicroStep()">+ Add Step</button></div>
+                    <div class="form-group"><label for="routineMicroVariant">Micro-Variant (60-90s fallback)</label><input type="text" id="routineMicroVariant" placeholder="e.g., 1-min: Close eyes, 3 deep breaths."></div>
+                    <button type="submit" class="btn-primary">Add Routine</button>
+                </form>
+                <div class="add-rule-form">
+                    <h3>Add New Rule</h3>
+                    <div class="form-group"><label for="ruleTitle">Rule Title *</label><input type="text" id="ruleTitle" required></div>
+                    <div class="form-group"><label for="ruleDescription">Rule Description *</label><textarea id="ruleDescription" rows="3" required></textarea></div>
+                    <button type="button" class="btn-primary" onclick="addRule()">Add Rule</button>
+                </div>
+            </div>
+            <div id="dashboard" class="tab-content">
+                <div class="section-header"><h2>Performance Dashboard</h2></div>
+                <div class="dashboard-stats">
+                    <div class="dashboard-stat-item"><strong><span id="dashboardTotalRoutines">0</span></strong><span>Total Routines</span></div>
+                    <div class="dashboard-stat-item"><strong><span id="dashboardCompletedRoutines">0</span></strong><span>Completed</span></div>
+                    <div class="dashboard-stat-item"><strong><span id="dashboardSuccessRate">0%</span></strong><span>Success Rate</span></div>
+                    <div class="dashboard-stat-item"><strong><span id="dashboardTotalStreaks">0</span></strong><span>Total Streaks</span></div>
+                    <div class="dashboard-stat-item"><strong><span id="dashboardPainDrillExposureRate">0%</span></strong><span>Pain Drill Exposure (7 days)</span></div>
+                </div>
+                <div class="dopamine-trigger" id="dopamineTrigger">Crush your goals! Every step forward builds unbreakable strength!</div>
+                <div class="suds-dashboard">
+                    <h3>SUDS Trend Dashboard (Last 7 Days)</h3>
+                    <table id="sudsTrendTable">
+                        <thead><tr><th>Challenge</th><th>Avg SUDS_pre</th><th>Avg SUDS_post</th><th>Avg Drop</th><th>Count</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="history" class="tab-content">
+                <div class="section-header">
+                    <h2>Routine History</h2>
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="historySearch" placeholder="🔍 Search history... Discover your journey!">
+                        <button class="search-clear" onclick="clearSearch('historySearch')">×</button>
+                        <div class="search-results-info" id="historySearchInfo"></div>
+                    </div>
+                </div>
+                <div id="historyContent"></div>
+                <div class="loading-indicator" id="historyLoading">Loading history...</div>
+                <button id="loadMoreHistoryBtn" class="load-more-history" style="display: none;" onclick="loadMoreHistory()">Load More</button>
+            </div>
+            <div id="settings" class="tab-content">
+                <div class="section-header"><h2>Settings & Data Management</h2></div>
+                <div class="category-management">
+                    <h3>Manage Categories</h3>
+                    <div class="category-input-group">
+                        <input type="text" id="newCategoryInput" placeholder="New category...">
+                        <button type="button" onclick="addCategory()" class="btn-primary" style="width: auto; padding: 8px 12px;">+</button>
+                    </div>
+                    <div class="category-list" id="categoryList"></div>
+                </div>
+                <div class="on-call-scripts">
+                    <h3>Quick On-Call Scripts</h3>
+                    <ul>
+                        <li>**Insult:** "Their words are just noise. My worth is absolute."</li>
+                        <li>**Rejection:** "This door closed. Another, better one, opens. I am unstoppable."</li>
+                        <li>**Seduction Urge (screens):** "I command my focus. My vision is clear."</li>
+                        <li>**Shame:** "I own my past. I build my future. I am resilient."</li>
+                        <li>**Boredom:** "This is fertile ground. I will cultivate creation."</li>
+                        <li>**Family Conflict:** "I am the calm center. I lead with integrity."</li>
+                    </ul>
+                </div>
+                <div class="adaptive-intensity-rule">
+                    <h4>Adaptive Intensity Rule:</h4>
+                    <p>If SUDS for a routine does not drop by 15% in 4 weeks, escalate exposure frequency one step. If SUDS spikes >20% for 3 consecutive sessions, pause exposure, switch to micro-variant + 7-day recovery. If I experience panic, dissociation, or suicidal thoughts during conditioning, I STOP and contact a clinician immediately.</p>
+                </div>
+                <div class="tracker-settings">
+                    <h3>Tracker Settings</h3>
+                    <div class="form-group"><label><input type="checkbox" id="enableMicroVariant"> Enable Micro-Variant Fallback</label></div>
+                </div>
+                <div class="undo-redo-buttons">
+                    <button type="button" class="btn" id="undoBtn" onclick="undo()" disabled>Undo</button>
+                    <button type="button" class="btn" id="redoBtn" onclick="redo()" disabled>Redo</button>
+                </div>
+                <div class="data-management-buttons">
+                    <h3>Data Management</h3>
+                    <button type="button" class="btn" onclick="exportData()">Export Data (JSON)</button>
+                    <button type="button" class="btn" onclick="exportCSV()">Export All Data (CSV)</button>
+                    <button type="button" class="btn" onclick="archiveHistory()">Archive History (JSON)</button>
+                    <div class="file-input-wrapper">
+                        <button type="button" class="btn import">Import Data (JSON)</button>
+                        <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+                    </div>
+                </div>
+                <div class="clear-buttons">
+                    <h3>Clear Data</h3>
+                    <button type="button" class="btn-danger" onclick="clearTodayRoutines()">Clear Today's Routines</button>
+                    <button type="button" class="btn-danger" onclick="clearAllData()">Clear All Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const DATA_VERSION = 1.7; // Updated version for new features
+        let routines = [];
+        let categories = [];
+        let history = [];
+        let rules = [];
+        let todaySubTab = 'rules';
+        let painDrillsFilter = 'active-today';
+        let weeklyFilter = 'active-today';
+        let monthlyFilter = 'active-today';
+        let lastAccessedDate = null;
+        let lastSavedTimestamp = null;
+        let enableMicroVariant = false;
+        let historyStack = [];
+        let historyPointer = -1;
+        const MAX_UNDO_STATES = 10;
+        const HISTORY_BATCH_SIZE = 30;
+        let currentHistoryDisplayCount = 0;
+
+        // Performance optimization variables
+        let searchTimeout = null;
+        let isLoading = false;
+        let filteredRoutines = [];
+        let filteredHistory = [];
+
+        // Analytics tracking
+        let analyticsData = {
+            routinesCompleted: 0,
+            totalTimeSpent: 0,
+            averageSUDS: { pre: 0, post: 0 },
+            streakRecord: 0
+        };
+        const CHALLENGE_INTENSITIES = {
+            "Insult/Disrespect": 98, "Seduction Vulnerability": 97, "Romantic/Love Pain": 96, "Rejection": 95,
+            "Death/Loss Fear": 94, "Shame": 92, "Wasting Time for Others": 92, "Boredom": 90,
+            "Betrayal/Injustice": 88, "Frustration with Problems": 88, "Leader's Burden": 85,
+            "Connection Offensive": 85, "Guilt to Gold": 82, "Family CEO Meeting": 80,
+            "Wealth Ritual": 78, "Focus Blocks": 75, "Status Stack": 75,
+            "Creative Recovery": 70, "Envy -> Energy Convert": 70, "Sensory Reset": 65,
+            "Shadow Integration": 60, "Ethical Audit": 45, "Physical Pain Rehab": 35,
+            "Risk Calibration": 30, "Loss of meaning": 50, "Obscurity": 55
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            loadAnalytics();
+            checkAndResetDailyRoutines();
+            setupEventListeners();
+            updateDisplay();
+            scheduleNextMidnightCheck();
+            updateNextRoutineDisplay();
+            setInterval(updateNextRoutineDisplay, 60 * 1000);
+            addInitialData();
+            updateSudsTrendDashboard();
+            showTab('today-routines'); // Ensure a tab is shown on load
+            setTodaySubTab(todaySubTab); // Ensure a sub-tab is shown on load
+        });
+        function setupEventListeners() {
+            document.getElementById('addRoutineForm').addEventListener('submit', addRoutine);
+            document.getElementById('resetFrequency').addEventListener('change', toggleDaysSelectorGroup);
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+            document.getElementById('enableMicroVariant').addEventListener('change', function(e) {
+                enableMicroVariant = e.target.checked;
+                saveData();
+                updateDisplay();
+            });
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    showTab(button.dataset.tab);
+                });
+            });
+
+            // Add search event listeners
+            document.getElementById('historySearch').addEventListener('input', function(e) {
+                debouncedSearch(e.target.value, 'history');
+            });
+        }
+
+        // Utility functions for enhanced UX
+        function showNotification(message, type = 'success', duration = 3000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+
+        function clearSearch(searchId) {
+            const searchInput = document.getElementById(searchId);
+            if (searchInput) {
+                searchInput.value = '';
+                if (searchId === 'routinesSearch') {
+                    filteredRoutines = [];
+                    setTodaySubTab(todaySubTab);
+                } else if (searchId === 'historySearch') {
+                    filteredHistory = [];
+                    renderHistory();
+                }
+            }
+
+            // Hide search info when clearing
+            const searchInfoElement = document.getElementById(`${searchId}Info`);
+            if (searchInfoElement) {
+                hideSearchInfo(searchInfoElement);
+            }
+        }
+
+        function debouncedSearch(query, type) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(query, type);
+            }, 300);
+        }
+
+        function performSearch(query, type) {
+            const searchInfoElement = document.getElementById(`${type}SearchInfo`);
+
+            if (!query.trim()) {
+                if (type === 'routines') {
+                    filteredRoutines = [];
+                    setTodaySubTab(todaySubTab);
+                } else if (type === 'history') {
+                    filteredHistory = [];
+                    renderHistory();
+                }
+                hideSearchInfo(searchInfoElement);
+                return;
+            }
+
+            const searchTerm = query.toLowerCase();
+
+            if (type === 'routines') {
+                filteredRoutines = routines.filter(routine =>
+                    routine.title.toLowerCase().includes(searchTerm) ||
+                    routine.description.toLowerCase().includes(searchTerm) ||
+                    routine.category.toLowerCase().includes(searchTerm) ||
+                    routine.painTag.toLowerCase().includes(searchTerm)
+                );
+                setTodaySubTab(todaySubTab);
+                showSearchResultsInfo(searchInfoElement, filteredRoutines.length, query, 'routines');
+            } else if (type === 'history') {
+                filteredHistory = history.filter(day =>
+                    day.date.toLowerCase().includes(searchTerm) ||
+                    day.routines.some(routine =>
+                        routine.title.toLowerCase().includes(searchTerm) ||
+                        routine.description.toLowerCase().includes(searchTerm) ||
+                        routine.category.toLowerCase().includes(searchTerm)
+                    )
+                );
+                renderHistory();
+                showSearchResultsInfo(searchInfoElement, filteredHistory.length, query, 'history');
+            }
+        }
+
+        function showSearchResultsInfo(element, count, query, type) {
+            if (count === 0) {
+                element.textContent = `🔍 No results for "${query}" - Keep searching, warrior! 💪`;
+                element.className = 'search-results-info show motivational';
+            } else if (count === 1) {
+                element.textContent = `🎯 Found ${count} result for "${query}" - Perfect match! ✨`;
+                element.className = 'search-results-info show excited';
+            } else if (count < 5) {
+                element.textContent = `🚀 Found ${count} results for "${query}" - Great finds! 🌟`;
+                element.className = 'search-results-info show';
+            } else {
+                element.textContent = `💥 Found ${count} results for "${query}" - Amazing discovery! 🔥`;
+                element.className = 'search-results-info show motivational';
+            }
+
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                hideSearchInfo(element);
+            }, 4000);
+        }
+
+        function hideSearchInfo(element) {
+            element.className = 'search-results-info';
+        }
+
+        // Performance optimization functions
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        function debounce(func, wait, immediate) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                const later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                const callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        }
+
+        // Enhanced data validation
+        function validateRoutineData(routine) {
+            const errors = [];
+
+            if (!routine.title || routine.title.trim().length < 1) {
+                errors.push('Title is required');
+            }
+
+            if (!routine.description || routine.description.trim().length < 1) {
+                errors.push('Description is required');
+            }
+
+            if (routine.time && !/^(?:2[0-3]|[01]?[0-9]):[0-5][0-9]$/.test(routine.time)) {
+                errors.push('Invalid time format');
+            }
+
+            if (routine.sudsPre !== null && (routine.sudsPre < 0 || routine.sudsPre > 100)) {
+                errors.push('SUDS pre must be between 0 and 100');
+            }
+
+            if (routine.sudsPost !== null && (routine.sudsPost < 0 || routine.sudsPost > 100)) {
+                errors.push('SUDS post must be between 0 and 100');
+            }
+
+            return errors;
+        }
+
+        // Analytics functions
+        function updateAnalytics() {
+            const completedRoutines = routines.filter(r => r.completed);
+            analyticsData.routinesCompleted = completedRoutines.length;
+
+            const totalTime = completedRoutines.reduce((sum, r) => sum + (r.duration || 0), 0);
+            analyticsData.totalTimeSpent = totalTime;
+
+            const validSUDS = completedRoutines.filter(r => r.sudsPre !== null && r.sudsPost !== null);
+            if (validSUDS.length > 0) {
+                const avgPre = validSUDS.reduce((sum, r) => sum + r.sudsPre, 0) / validSUDS.length;
+                const avgPost = validSUDS.reduce((sum, r) => sum + r.sudsPost, 0) / validSUDS.length;
+                analyticsData.averageSUDS = { pre: avgPre, post: avgPost };
+            }
+
+            const maxStreak = Math.max(...routines.map(r => r.streak || 0), 0);
+            analyticsData.streakRecord = maxStreak;
+
+            // Save analytics data
+            localStorage.setItem('reprogrammingAnalytics', JSON.stringify(analyticsData));
+        }
+
+        function loadAnalytics() {
+            try {
+                const saved = localStorage.getItem('reprogrammingAnalytics');
+                if (saved) {
+                    analyticsData = { ...analyticsData, ...JSON.parse(saved) };
+                }
+            } catch (e) {
+                console.error('Error loading analytics:', e);
+            }
+        }
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => { content.classList.remove('active'); });
+            document.querySelectorAll('.nav-button').forEach(button => { button.classList.remove('active'); });
+            document.getElementById(tabId).classList.add('active');
+            const navButton = document.querySelector(`.nav-button[data-tab="${tabId}"]`);
+            if (navButton) {
+                navButton.classList.add('active');
+            }
+            if (tabId === 'history') {
+                currentHistoryDisplayCount = HISTORY_BATCH_SIZE;
+                renderHistory();
+            } else if (tabId === 'dashboard') {
+                updateDashboardStats();
+                updateSudsTrendDashboard();
+            } else if (tabId === 'today-routines') {
+                setTodaySubTab(todaySubTab);
+            }
+        }
+        function setTodaySubTab(subTabId) {
+            console.log(`setTodaySubTab called with: ${subTabId}`);
+            // Hide all sub-tab contents
+            document.querySelectorAll('.sub-tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none'; // Force hide
+            });
+            // Remove active from all buttons
+            document.querySelectorAll('.sub-tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            // Show the selected sub-tab content
+            const targetContent = document.getElementById(`${subTabId}-sub-tab-content`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                targetContent.style.display = 'block'; // Force show
+            } else {
+                console.error(`Sub-tab content not found for: ${subTabId}`);
+            }
+            // Activate the selected button
+            const targetButton = document.querySelector(`.sub-tab-button[data-sub-tab="${subTabId}"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            } else {
+                console.error(`Sub-tab button not found for: ${subTabId}`);
+            }
+            todaySubTab = subTabId;
+            if (subTabId === 'rules') {
+                renderRules();
+            } else if (subTabId === 'pain-drills') {
+                renderPainDrills();
+            } else {
+                renderRoutinesBySubTab(subTabId);
+            }
+        }
+        function setPainDrillsFilter(filter) {
+            document.querySelectorAll('.pain-drills-filter-btn').forEach(btn => { btn.classList.remove('active'); });
+            document.querySelector(`.pain-drills-filter-btn[data-filter="${filter}"]`).classList.add('active');
+            painDrillsFilter = filter;
+            renderPainDrills();
+        }
+        function setWeeklyFilter(filter) {
+            document.querySelectorAll('#weekly-sub-tab-content .pain-drills-filter-btn').forEach(btn => { btn.classList.remove('active'); });
+            document.querySelector(`#weekly-sub-tab-content .pain-drills-filter-btn[data-filter="${filter}"]`).classList.add('active');
+            weeklyFilter = filter;
+            renderRoutinesBySubTab('weekly');
+        }
+        function setMonthlyFilter(filter) {
+            document.querySelectorAll('#monthly-sub-tab-content .pain-drills-filter-btn').forEach(btn => { btn.classList.remove('active'); });
+            document.querySelector(`#monthly-sub-tab-content .pain-drills-filter-btn[data-filter="${filter}"]`).classList.add('active');
+            monthlyFilter = filter;
+            renderRoutinesBySubTab('monthly');
+        }
+        function saveData() {
+            try {
+                // Update analytics before saving
+                updateAnalytics();
+
+                const dataToSave = {
+                    version: DATA_VERSION,
+                    routines,
+                    categories,
+                    history,
+                    rules,
+                    lastAccessedDate,
+                    enableMicroVariant,
+                    analyticsData
+                };
+                localStorage.setItem('routinePlannerData', JSON.stringify(dataToSave));
+                lastSavedTimestamp = new Date().toLocaleString();
+                document.getElementById('lastSavedTimestamp').textContent = `Last Saved: ${lastSavedTimestamp}`;
+                updateUndoRedoButtons();
+
+                // Show success notification
+                showNotification('Data saved successfully!', 'success', 2000);
+            } catch (e) {
+                console.error("Error saving data to localStorage:", e);
+                showNotification("Error saving data. Your browser's storage might be full or corrupted.", 'error', 5000);
+            }
+        }
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('routinePlannerData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.version !== DATA_VERSION) {
+                        console.warn(`Data version mismatch. Expected ${DATA_VERSION}, got ${data.version}. Attempting migration.`);
+                        data.routines = data.routines.map(r => ({
+                            ...r,
+                            streak: r.streak !== undefined ? r.streak : 0,
+                            lastCompletionDate: r.lastCompletionDate !== undefined ? r.lastCompletionDate : null,
+                            painTag: r.painTag !== undefined ? r.painTag : '',
+                            sudsPre: r.sudsPre !== undefined ? r.sudsPre : null,
+                            sudsPost: r.sudsPost !== undefined ? r.sudsPost : null,
+                            duration: r.duration !== undefined ? r.duration : null,
+                            reps: r.reps !== undefined ? r.reps : null,
+                            outcome: r.outcome !== undefined ? r.outcome : '',
+                            microVariant: r.microVariant !== undefined ? r.microVariant : '',
+                            resetFrequency: r.resetFrequency !== undefined ? r.resetFrequency : (r.isDaily ? 'daily' : (r.isWeekly ? 'weekly' : 'manual')),
+                            isWeekly: r.isWeekly !== undefined ? r.isWeekly : false,
+                            microSteps: r.microSteps ? r.microSteps.map(ms => ({ ...ms, notes: ms.notes !== undefined ? ms.notes : '' })) : []
+                        }));
+                        data.history = data.history.map(h => ({
+                            ...h,
+                            routines: h.routines.map(r => ({
+                                ...r,
+                                painTag: r.painTag !== undefined ? r.painTag : '',
+                                sudsPre: r.sudsPre !== undefined ? r.sudsPre : null,
+                                sudsPost: r.sudsPost !== undefined ? r.sudsPost : null,
+                                duration: r.duration !== undefined ? r.duration : null,
+                                reps: r.reps !== undefined ? r.reps : null,
+                                outcome: r.outcome !== undefined ? r.outcome : '',
+                                microVariant: r.microVariant !== undefined ? r.microVariant : '',
+                                resetFrequency: r.resetFrequency !== undefined ? r.resetFrequency : (r.isDaily ? 'daily' : (r.isWeekly ? 'weekly' : 'manual')),
+                                isWeekly: r.isWeekly !== undefined ? r.isWeekly : false,
+                                microSteps: r.microSteps ? r.microSteps.map(ms => ({ ...ms, notes: ms.notes !== undefined ? ms.notes : '' })) : []
+                            }))
+                        }));
+                        data.enableMicroVariant = data.enableMicroVariant !== undefined ? data.enableMicroVariant : false;
+                        data.rules = data.rules !== undefined ? data.rules : [];
+                    }
+                    routines = data.routines || [];
+                    categories = data.categories || [];
+                    history = data.history || [];
+                    rules = data.rules || [];
+                    lastAccessedDate = data.lastAccessedDate;
+                    enableMicroVariant = data.enableMicroVariant !== undefined ? data.enableMicroVariant : false;
+                    analyticsData = data.analyticsData || analyticsData;
+                    lastSavedTimestamp = new Date().toLocaleString();
+                    document.getElementById('lastSavedTimestamp').textContent = `Last Saved: ${lastSavedTimestamp}`;
+                    document.getElementById('enableMicroVariant').checked = enableMicroVariant;
+                    pushState();
+                } else {
+                    lastSavedTimestamp = "Never";
+                    document.getElementById('lastSavedTimestamp').textContent = `Last Saved: ${lastSavedTimestamp}`;
+                }
+            } catch (e) {
+                console.error("Error loading data from localStorage:", e);
+                showNotification("Error loading data. Your saved data might be corrupted. Resetting all data.", 'error', 5000);
+                clearAllData(false);
+            }
+        }
+        function exportData() {
+            const dataToExport = {
+                version: DATA_VERSION, routines, categories, history, rules, lastAccessedDate, enableMicroVariant, analyticsData
+            };
+            const filename = `reprogramming_v3_data_${new Date().toISOString().slice(0, 10)}.json`;
+            const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('Data exported successfully!');
+        }
+        function exportCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Date,Routine ID,Title,Category,Challenge Tag,SUDS_pre,SUDS_post,Duration (min),Reps,Notes,Outcome\n";
+            const allEntries = [];
+            routines.forEach(r => {
+                if (r.completed) {
+                    allEntries.push({ date: new Date().toDateString(), routine: r });
+                }
+            });
+            history.forEach(h => {
+                h.routines.forEach(r => {
+                    allEntries.push({ date: h.date, routine: r });
+                });
+            });
+            allEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+            allEntries.forEach(entry => {
+                const r = entry.routine;
+                const row = [
+                    `"${entry.date}"`, `"${r.id}"`, `"${r.title.replace(/"/g, '""')}"`,
+                    `"${r.category.replace(/"/g, '""')}"`, `"${r.painTag.replace(/"/g, '""')}"`,
+                    r.sudsPre !== null ? r.sudsPre : '', r.sudsPost !== null ? r.sudsPost : '',
+                    r.duration !== null ? r.duration : '', r.reps !== null ? r.reps : '',
+                    `"${r.notes.replace(/"/g, '""')}"`, `"${r.completed ? 'Completed' : 'Incomplete'}"`
+                ];
+                csvContent += row.join(",") + "\n";
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `reprogramming_v3_log_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            alert('CSV data exported successfully!');
+        }
+        function archiveHistory() {
+            if (history.length === 0) {
+                alert("No history to archive.");
+                return;
+            }
+            const dataToArchive = { version: DATA_VERSION, history: JSON.parse(JSON.stringify(history)) };
+            const filename = `reprogramming_v3_history_archive_${new Date().toISOString().slice(0, 10)}.json`;
+            const blob = new Blob([JSON.stringify(dataToArchive, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            if (confirm("History archived successfully! Do you want to clear the archived history from the app now?")) {
+                history = [];
+                pushState();
+                saveData();
+                updateDisplay();
+                alert("History cleared from app.");
+            }
+        }
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!confirm('Importing data will OVERWRITE your current planner state. Are you sure you want to proceed?')) {
+                event.target.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (importedData.version === undefined || importedData.routines === undefined || importedData.categories === undefined || importedData.history === undefined) {
+                        throw new Error("Invalid data structure in imported file.");
+                    }
+                    if (importedData.version !== DATA_VERSION) {
+                        alert(`Warning: Imported data version (${importedData.version}) does not match current app version (${DATA_VERSION}). Data might not load correctly.`);
+                    }
+                    routines = importedData.routines || [];
+                    categories = importedData.categories || [];
+                    history = importedData.history || [];
+                    rules = importedData.rules || [];
+                    lastAccessedDate = importedData.lastAccessedDate || null;
+                    enableMicroVariant = importedData.enableMicroVariant !== undefined ? importedData.enableMicroVariant : false;
+                    routines = routines.map(r => ({
+                        ...r,
+                        streak: r.streak !== undefined ? r.streak : 0, lastCompletionDate: r.lastCompletionDate !== undefined ? r.lastCompletionDate : null, painTag: r.painTag !== undefined ? r.painTag : '', sudsPre: r.sudsPre !== undefined ? r.sudsPre : null, sudsPost: r.sudsPost !== undefined ? r.sudsPost : null, duration: r.duration !== undefined ? r.duration : null, reps: r.reps !== undefined ? r.reps : null, outcome: r.outcome !== undefined ? r.outcome : '', microVariant: r.microVariant !== undefined ? r.microVariant : '', resetFrequency: r.resetFrequency !== undefined ? r.resetFrequency : (r.isDaily ? 'daily' : (r.isWeekly ? 'weekly' : 'manual')), isWeekly: r.isWeekly !== undefined ? r.isWeekly : false, microSteps: r.microSteps ? r.microSteps.map(ms => ({ ...ms, notes: ms.notes !== undefined ? ms.notes : '' })) : []
+                    }));
+                    history = history.map(h => ({
+                        ...h,
+                        routines: h.routines.map(r => ({
+                            ...r,
+                            painTag: r.painTag !== undefined ? r.painTag : '', sudsPre: r.sudsPre !== undefined ? r.sudsPre : null, sudsPost: r.sudsPost !== undefined ? r.sudsPost : null, duration: r.duration !== undefined ? r.duration : null, reps: r.reps !== undefined ? r.reps : null, outcome: r.outcome !== undefined ? r.outcome : '', microVariant: r.microVariant !== undefined ? r.microVariant : '', resetFrequency: r.resetFrequency !== undefined ? r.resetFrequency : (r.isDaily ? 'daily' : (r.isWeekly ? 'weekly' : 'manual')), isWeekly: r.isWeekly !== undefined ? r.isWeekly : false, microSteps: r.microSteps ? r.microSteps.map(ms => ({ ...ms, notes: ms.notes !== undefined ? ms.notes : '' })) : []
+                        }))
+                    }));
+                    saveData();
+                    checkAndResetDailyRoutines();
+                    updateDisplay();
+                    alert('Data imported successfully!');
+                    event.target.value = '';
+                } catch (error) {
+                    console.error("Error importing data:", error);
+                    alert(`Failed to import data: ${error.message || 'Invalid JSON file or corrupted data.'}`);
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file);
+        }
+        function pushState() {
+            const currentState = {
+                routines: JSON.parse(JSON.stringify(routines)), categories: JSON.parse(JSON.stringify(categories)), history: JSON.parse(JSON.stringify(history)), rules: JSON.parse(JSON.stringify(rules)), lastAccessedDate: lastAccessedDate, enableMicroVariant: enableMicroVariant
+            };
+            if (historyPointer < historyStack.length - 1) {
+                historyStack = historyStack.slice(0, historyPointer + 1);
+            }
+            historyStack.push(currentState);
+            historyPointer++;
+            if (historyStack.length > MAX_UNDO_STATES) {
+                historyStack.shift();
+                historyPointer--;
+            }
+            updateUndoRedoButtons();
+        }
+        function applyState(state) {
+            routines = JSON.parse(JSON.stringify(state.routines));
+            categories = JSON.parse(JSON.stringify(state.categories));
+            history = JSON.parse(JSON.stringify(state.history));
+            rules = JSON.parse(JSON.stringify(state.rules));
+            lastAccessedDate = state.lastAccessedDate;
+            enableMicroVariant = state.enableMicroVariant;
+            document.getElementById('enableMicroVariant').checked = enableMicroVariant;
+            saveData();
+            updateDisplay();
+        }
+        function undo() {
+            if (historyPointer > 0) {
+                historyPointer--;
+                applyState(historyStack[historyPointer]);
+            }
+            updateUndoRedoButtons();
+        }
+        function redo() {
+            if (historyPointer < historyStack.length - 1) {
+                historyPointer++;
+                applyState(historyStack[historyPointer]);
+            }
+            updateUndoRedoButtons();
+        }
+        function updateUndoRedoButtons() {
+            document.getElementById('undoBtn').disabled = historyPointer <= 0;
+            document.getElementById('redoBtn').disabled = historyPointer >= historyStack.length - 1;
+        }
+        function checkAndResetDailyRoutines() {
+            const now = new Date();
+            const effectiveToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const effectiveTodayString = effectiveToday.toDateString();
+            if (lastAccessedDate && lastAccessedDate !== effectiveTodayString) {
+                if (routines.length > 0) {
+                    const historyEntry = { date: lastAccessedDate, routines: JSON.parse(JSON.stringify(routines)) };
+                    history.unshift(historyEntry);
+                }
+                const newRoutines = [];
+                const todayDayOfWeek = effectiveToday.getDay();
+                const currentMonthDay = effectiveToday.getDate();
+                routines.forEach(r => {
+                    let shouldAdd = false;
+                    let newStreak = r.streak || 0;
+                    const wasCompletedYesterday = r.completed && r.lastCompletionDate === lastAccessedDate;
+                    if (r.resetFrequency === 'daily') {
+                        if (!r.selectedDays || r.selectedDays.includes(todayDayOfWeek)) {
+                            shouldAdd = true;
+                            if (wasCompletedYesterday) { newStreak++; } else { newStreak = 0; }
+                        }
+                    } else if (r.resetFrequency === 'weekly') {
+                        if (r.selectedDays && r.selectedDays.includes(todayDayOfWeek)) {
+                            shouldAdd = true;
+                            newStreak = 0;
+                        } else {
+                            if (wasCompletedYesterday) { newStreak++; shouldAdd = true; } else { newStreak = 0; }
+                        }
+                    } else if (r.resetFrequency === 'monthly') {
+                        if (r.selectedDays && r.selectedDays.includes(currentMonthDay)) {
+                            shouldAdd = true;
+                            newStreak = 0;
+                        } else {
+                            if (wasCompletedYesterday) { newStreak++; shouldAdd = true; } else { newStreak = 0; }
+                        }
+                    } else {
+                        if (wasCompletedYesterday) { newStreak++; } else { newStreak = 0; }
+                        shouldAdd = true;
+                    }
+                    if (shouldAdd) {
+                        newRoutines.push({
+                            ...r,
+                            id: Date.now() + Math.random(), completed: false, notes: '', microSteps: r.microSteps.map(step => ({...step, completed: false, notes: ''})), streak: newStreak, lastCompletionDate: null, sudsPre: null, sudsPost: null, duration: null, reps: null, outcome: ''
+                        });
+                    }
+                });
+                routines = newRoutines;
+                pushState();
+            }
+            lastAccessedDate = effectiveTodayString;
+            saveData();
+        }
+        function scheduleNextMidnightCheck() {
+            const now = new Date();
+            const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+            const msUntilNextCheck = nextMidnight.getTime() - now.getTime();
+            setTimeout(() => {
+                checkAndResetDailyRoutines();
+                updateDisplay();
+                scheduleNextMidnightCheck();
+            }, msUntilNextCheck);
+        }
+        function addRoutine(e) {
+            e.preventDefault();
+            const title = document.getElementById('routineTitle').value.trim();
+            let time = document.getElementById('routineTime').value;
+            const description = document.getElementById('routineDescription').value.trim();
+            let category = document.getElementById('routineCategory').value;
+            const painTag = document.getElementById('routinePainTag').value.trim();
+            const resetFrequency = document.getElementById('resetFrequency').value;
+            const microVariant = document.getElementById('routineMicroVariant').value.trim();
+            const organizeSection = document.getElementById('organizeSection').value;
+
+            if (!title || !description) {
+                alert('Please fill in all required fields: Title and Description.');
+                return;
+            }
+            if (organizeSection === 'pain-drills') {
+                time = null; // Pain drills are trigger-based, no fixed time
+                category = 'Pain Drills'; // Force category for pain drills
+            }
+
+            const microSteps = Array.from(document.querySelectorAll('#microSteps input')).map(input => input.value.trim()).filter(step => step).map(step => ({ text: step, completed: false, notes: '' }));
+            let selectedDays = [];
+            if (resetFrequency === 'daily' || resetFrequency === 'weekly' || resetFrequency === 'monthly') {
+                selectedDays = Array.from(document.querySelectorAll('#daysSelector input[type="checkbox"]:checked')).map(cb => parseInt(cb.value));
+                if (selectedDays.length === 0) {
+                    alert(`Please select at least one day for ${resetFrequency} routines.`);
+                    return;
+                }
+            }
+            const routine = {
+                id: Date.now() + Math.random(), title, time: time || null, description, category, painTag, microSteps, completed: false, notes: '', resetFrequency, selectedDays: selectedDays.length > 0 ? selectedDays : null, streak: 0, lastCompletionDate: null, sudsPre: null, sudsPost: null, duration: null, reps: null, outcome: '', microVariant: microVariant
+            };
+            routines.push(routine);
+            routines.sort((a, b) => {
+                if (!a.time && !b.time) return 0;
+                if (!a.time) return 1;
+                if (!b.time) return -1;
+                return a.time.localeCompare(b.time);
+            });
+            pushState();
+            saveData();
+            updateDisplay();
+            document.getElementById('addRoutineForm').reset();
+            document.getElementById('microSteps').innerHTML = '';
+            document.getElementById('daysSelectorGroup').style.display = 'none';
+            document.getElementById('resetFrequency').value = 'manual';
+        }
+        function deleteRoutine(id) {
+            if (confirm('Are you sure you want to delete this routine? This action cannot be undone.')) {
+                routines = routines.filter(r => r.id !== id);
+                pushState();
+                saveData();
+                updateDisplay();
+            }
+        }
+        function toggleComplete(id) {
+            const routine = routines.find(r => r.id === id);
+            if (routine) {
+                routine.completed = !routine.completed;
+                const now = new Date();
+                const effectiveToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const effectiveTodayString = effectiveToday.toDateString();
+                const yesterday = new Date(effectiveToday);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayString = yesterday.toDateString();
+                if (routine.completed) {
+                    if (routine.lastCompletionDate === yesterdayString) {
+                        routine.streak = (routine.streak || 0) + 1;
+                    } else if (routine.lastCompletionDate !== effectiveTodayString) {
+                        routine.streak = 1;
+                    }
+                    routine.lastCompletionDate = effectiveTodayString;
+                    routine.outcome = 'Completed';
+                    triggerDopamineSpike();
+                } else {
+                    routine.streak = 0;
+                    routine.lastCompletionDate = null;
+                    routine.outcome = 'Incomplete';
+                }
+                pushState();
+                saveData();
+                updateDisplay();
+                updateMobileCompletedList();
+            }
+        }
+        function reopenRoutine(id) {
+            const routine = routines.find(r => r.id === id);
+            if (routine) {
+                if (confirm('Are you sure you want to reopen this routine? This will allow editing again.')) {
+                    routine.completed = false;
+                    routine.streak = 0;
+                    routine.lastCompletionDate = null;
+                    routine.sudsPre = null;
+                    routine.sudsPost = null;
+                    routine.duration = null;
+                    routine.reps = null;
+                    routine.outcome = '';
+                    routine.microSteps.forEach(step => { step.completed = false; step.notes = ''; });
+                    pushState();
+                    saveData();
+                    updateDisplay();
+                }
+            }
+        }
+        function editRoutineTitle(id) {
+            const routine = routines.find(r => r.id === id);
+            if (routine && !routine.completed) {
+                const newTitle = prompt("Edit routine title:", routine.title);
+                if (newTitle !== null && newTitle.trim() !== '') {
+                    routine.title = newTitle.trim();
+                    pushState();
+                    saveData();
+                    updateDisplay();
+                }
+            }
+        }
+        function editRoutineTime(id) {
+            const routine = routines.find(r => r.id === id);
+            if (routine && !routine.completed) {
+                const newTime = prompt("Edit routine time (HH:MM, 24-hour format):", routine.time || '');
+                if (newTime !== null) {
+                    if (newTime.trim() === '' || /^(?:2[0-3]|[01]?[0-9]):[0-5][0-9]$/.test(newTime.trim())) {
+                        routine.time = newTime.trim() === '' ? null : newTime.trim();
+                        pushState();
+                        saveData();
+                        updateDisplay();
+                    } else {
+                        alert("Invalid time format. Please use HH:MM (24-hour).");
+                    }
+                }
+            }
+        }
+        function addMicroStep() {
+            const container = document.getElementById('microSteps');
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'micro-step';
+            stepDiv.innerHTML = `<input type="text" placeholder="Enter micro-step..." required><button type="button" class="remove-step" onclick="removeMicroStep(this)">×</button>`;
+            container.appendChild(stepDiv);
+        }
+        function removeMicroStep(button) { button.parentElement.remove(); }
+        function addMicroStepToRoutine(routineId) {
+            const routine = routines.find(r => r.id === routineId);
+            if (routine && !routine.completed) {
+                const newStepText = prompt("Enter new micro-step:");
+                if (newStepText && newStepText.trim() !== '') {
+                    routine.microSteps.push({ text: newStepText.trim(), completed: false, notes: '' });
+                    pushState();
+                    saveData();
+                    updateDisplay();
+                }
+            }
+        }
+        function removeMicroStepFromRoutine(routineId, stepIndex) {
+            const routine = routines.find(r => r.id === routineId);
+            if (routine && !routine.completed) {
+                if (confirm('Are you sure you want to remove this micro-step?')) {
+                    routine.microSteps.splice(stepIndex, 1);
+                    pushState();
+                    saveData();
+                    updateDisplay();
+                }
+            }
+        }
+        function toggleMicroStep(routineId, stepIndex) {
+            const routine = routines.find(r => r.id === routineId);
+            if (routine && routine.microSteps[stepIndex] && !routine.completed) {
+                routine.microSteps[stepIndex].completed = !routine.microSteps[stepIndex].completed;
+                pushState();
+                saveData();
+                updateDisplay();
+            }
+        }
+        function updateMicroStepText(routineId, stepIndex, newText) {
+            const routine = routines.find(r => r.id === routineId);
+            if (routine && routine.microSteps[stepIndex] && !routine.completed) {
+                routine.microSteps[stepIndex].text = newText.trim();
+                pushState();
+                saveData();
+                updateDisplay();
+            }
+        }
+        function toggleMicroStepJournal(routineId, stepIndex) {
+            const container = document.getElementById(`micro-step-notes-${routineId}-${stepIndex}`);
+            if (container) {
+                container.classList.toggle('expanded');
+                if (container.classList.contains('expanded')) {
+                    const textarea = container.querySelector('textarea');
+                    if (textarea) {
+                        textarea.style.height = 'auto';
+                        textarea.style.height = textarea.scrollHeight + 'px';
+                    }
+                }
+            }
+        }
+        function updateMicroStepNotes(routineId, stepIndex) {
+            const textarea = document.getElementById(`micro-step-notes-textarea-${routineId}-${stepIndex}`);
+            const routine = routines.find(r => r.id === routineId);
+            if (routine && routine.microSteps[stepIndex] && textarea && !routine.completed) {
+                routine.microSteps[stepIndex].notes = textarea.value;
+                pushState();
+                saveData();
+            }
+        }
+        function toggleJournal(id) {
+            const container = document.getElementById(`journal-${id}`);
+            const microStepsContainer = document.getElementById(`microsteps-${id}`);
+            const microVariantContainer = document.getElementById(`microvariant-${id}`);
+            document.querySelectorAll('.journal-container.expanded, .micro-steps-container.expanded, .micro-variant-container.expanded').forEach(el => {
+                if (el.id !== `journal-${id}` && el.id !== `microsteps-${id}` && el.id !== `microvariant-${id}`) {
+                    el.classList.remove('expanded');
+                }
+            });
+            container.classList.toggle('expanded');
+            microStepsContainer.classList.toggle('expanded');
+            if (enableMicroVariant && microVariantContainer) {
+                microVariantContainer.classList.toggle('expanded');
+            }
+            if (container.classList.contains('expanded')) {
+                const textarea = document.getElementById(`notes-${id}`);
+                if (textarea) {
+                    textarea.style.height = 'auto';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                }
+            }
+        }
+        function saveJournal(id) {
+            const textarea = document.getElementById(`notes-${id}`);
+            const routine = routines.find(r => r.id === id);
+            if (routine && textarea && !routine.completed) {
+                routine.notes = textarea.value;
+                pushState();
+                saveData();
+            }
+        }
+        function updateSuds(id, type) {
+            const input = document.getElementById(`${type}-${id}`);
+            const routine = routines.find(r => r.id === id);
+            if (routine && input && !routine.completed) {
+                routine[type] = parseInt(input.value);
+                pushState();
+                saveData();
+            }
+        }
+        function updateDuration(id) {
+            const input = document.getElementById(`duration-${id}`);
+            const routine = routines.find(r => r.id === id);
+            if (routine && input && !routine.completed) {
+                routine.duration = parseInt(input.value);
+                pushState();
+                saveData();
+            }
+        }
+        function updateReps(id) {
+            const input = document.getElementById(`reps-${id}`);
+            const routine = routines.find(r => r.id === id);
+            if (routine && input && !routine.completed) {
+                routine.reps = parseInt(input.value);
+                pushState();
+                saveData();
+            }
+        }
+        function addCategory() {
+            const input = document.getElementById('newCategoryInput');
+            const categoryName = input.value.trim();
+            if (categoryName) {
+                if (!categories.includes(categoryName)) {
+                    categories.push(categoryName);
+                    input.value = '';
+                    pushState();
+                    saveData();
+                    updateDisplay();
+                } else {
+                    alert('Category already exists!');
+                }
+            }
+        }
+        function deleteCategory(categoryName) {
+            if (confirm(`Are you sure you want to delete category "${categoryName}"? Routines assigned to this category will become "No Category".`)) {
+                categories = categories.filter(c => c !== categoryName);
+                routines.forEach(r => {
+                    if (r.category === categoryName) {
+                        r.category = '';
+                    }
+                });
+                pushState();
+                saveData();
+                updateDisplay();
+            }
+        }
+        function addRule() {
+            const titleInput = document.getElementById('ruleTitle');
+            const descriptionInput = document.getElementById('ruleDescription');
+            const title = titleInput.value.trim();
+            const description = descriptionInput.value.trim();
+            if (!title || !description) {
+                alert('Please fill in both title and description for the rule.');
+                return;
+            }
+            rules.push({ id: Date.now(), title, description });
+            pushState();
+            saveData();
+            titleInput.value = '';
+            descriptionInput.value = '';
+            alert('Rule added successfully!');
+        }
+        function deleteRule(id) {
+            if (confirm('Are you sure you want to delete this rule?')) {
+                rules = rules.filter(rule => rule.id !== id);
+                pushState();
+                saveData();
+                renderRules();
+            }
+        }
+        function renderRules() {
+            const rulesList = document.getElementById('rulesList');
+            rulesList.innerHTML = rules.map(rule => `
+                <div class="rule-card">
+                    <h4>${rule.title}</h4>
+                    <p>${rule.description}</p>
+                    <div class="rule-actions">
+                        <button class="delete-btn" onclick="deleteRule(${rule.id})">×</button>
+                    </div>
+                </div>
+            `).join('');
+            if (rules.length === 0) {
+                rulesList.innerHTML = `<div class="empty-state"><h3>No rules defined yet</h3><p>Add rules using the "Add New Routine/Rule" tab.</p></div>`;
+            }
+        }
+        function renderHistory() {
+            const content = document.getElementById('historyContent');
+            const loadMoreBtn = document.getElementById('loadMoreHistoryBtn');
+            if (history.length === 0) {
+                content.innerHTML = `<div class="empty-state"><h3>No history yet</h3><p>Complete some routines to see your history!</p></div>`;
+                loadMoreBtn.style.display = 'none';
+                return;
+            }
+            const daysToDisplay = history.slice(0, currentHistoryDisplayCount);
+            content.innerHTML = daysToDisplay.map(day => `
+                <div class="history-day">
+                    <div class="history-day-header" id="history-day-header-${day.date.replace(/\s/g, '-')}" onclick="toggleHistoryDay('${day.date.replace(/\s/g, '-')}')">
+                        <span>${new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        <span class="toggle-icon">▶</span>
+                    </div>
+                    <div class="history-day-content" id="history-day-content-${day.date.replace(/\s/g, '-')}" style="display:none;">
+                        ${day.routines.map(routine => `
+                            <div class="history-routine ${routine.completed ? 'completed' : 'incomplete'}">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <strong>${routine.title}</strong>
+                                    <span>${routine.completed ? '✅' : '❌'}</span>
+                                </div>
+                                <div style="font-size: 14px; color: ${routine.completed ? 'rgba(255,255,255,0.8)' : '#666'}; margin-bottom: 8px;">
+                                    ${routine.time ? `${formatTime(routine.time)} | ` : ''}${routine.description}
+                                    ${routine.painTag ? ` | Challenge: ${routine.painTag}` : ''}
+                                </div>
+                                ${routine.sudsPre !== null || routine.sudsPost !== null || routine.duration !== null || routine.reps !== null ? `
+                                    <div style="font-size: 12px; margin-bottom: 8px; color: ${routine.completed ? 'rgba(255,255,255,0.8)' : '#666'};">
+                                        ${routine.sudsPre !== null ? `SUDS_pre: ${routine.sudsPre}` : ''}
+                                        ${routine.sudsPost !== null ? ` SUDS_post: ${routine.sudsPost}` : ''}
+                                        ${routine.duration !== null ? ` Duration: ${routine.duration} min` : ''}
+                                        ${routine.reps !== null ? ` Reps: ${routine.reps}` : ''}
+                                    </div>
+                                ` : ''}
+                                ${routine.microSteps && routine.microSteps.length > 0 ? `
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: ${routine.completed ? 'white' : '#333'};">Steps:</strong>
+                                        <ul style="margin-left: 20px; margin-top: 4px; list-style: none;">
+                                            ${routine.microSteps.map(step => `
+                                                <li style="color: ${routine.completed ? 'white' : (step.completed ? '#00b894' : '#ff4757')};">
+                                                    ${step.completed ? '✓' : '✗'} ${step.text}
+                                                    ${step.notes ? `<br><span style="font-size: 11px; opacity: 0.7;">(Notes: ${step.notes})</span>` : ''}
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                                ${routine.notes ? `
+                                    <div style="background: ${routine.completed ? 'rgba(255,255,255,0.1)' : '#f8f9ff'}; padding: 8px; border-radius: 6px; font-size: 14px; color: ${routine.completed ? 'white' : '#333'};">
+                                        <strong style="color: ${routine.completed ? 'white' : '#333'};">Notes:</strong> ${routine.notes}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            if (currentHistoryDisplayCount < history.length) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+        function toggleHistoryDay(dateId) {
+            const header = document.getElementById(`history-day-header-${dateId}`);
+            const content = document.getElementById(`history-day-content-${dateId}`);
+            if (header && content) {
+                header.classList.toggle('expanded');
+                content.classList.toggle('expanded');
+            }
+        }
+        function loadMoreHistory() {
+            currentHistoryDisplayCount += HISTORY_BATCH_SIZE;
+            renderHistory();
+        }
+        function clearTodayRoutines() {
+            if (confirm('Are you sure you want to clear all of today\'s routines? This action cannot be undone.')) {
+                routines = [];
+                pushState();
+                saveData();
+                updateDisplay();
+            }
+        }
+        function clearAllData(confirmPrompt = true) {
+            if (confirmPrompt && !confirm('Are you sure you want to clear ALL data, including history, categories, rules, and current routines? This action cannot be undone.')) {
+                return;
+            }
+            routines = [];
+            categories = [];
+            history = [];
+            rules = [];
+            lastAccessedDate = null;
+            enableMicroVariant = false;
+            historyStack = [];
+            historyPointer = -1;
+            try { localStorage.removeItem('routinePlannerData'); } catch (e) { console.error("Error clearing data from localStorage:", e); }
+            lastSavedTimestamp = "Never";
+            updateDisplay();
+            alert('All data cleared!');
+        }
+        function updateDisplay() {
+            updateProgressStats();
+            updateDashboardStats();
+            updateCategorySelect();
+            updateCategoryList();
+            updateUndoRedoButtons();
+            updateNextRoutineDisplay();
+            updateSudsTrendDashboard();
+            setTodaySubTab(todaySubTab);
+        }
+        function updateProgressStats() {
+            const total = routines.length;
+            const completed = routines.filter(r => r.completed).length;
+            const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('totalRoutines').textContent = total;
+            document.getElementById('completedRoutines').textContent = completed;
+            document.getElementById('successRate').textContent = `${rate}%`;
+            document.getElementById('progressFill').style.width = `${rate}%`;
+            const totalStreaks = routines.reduce((sum, r) => sum + (r.streak || 0), 0);
+            document.getElementById('totalStreaks').textContent = totalStreaks;
+            const dashboardStatsContainer = document.querySelector('.sidebar .dashboard-stats');
+            Array.from(dashboardStatsContainer.children).forEach(child => {
+                if (!child.classList.contains('dashboard-stat-item') || child.querySelector('span').id === 'totalStreaks' || child.querySelector('span').id === 'painDrillExposureRate') {
+                } else { child.remove(); }
+            });
+            const categoryCompletionStats = {};
+            categories.forEach(cat => categoryCompletionStats[cat] = { total: 0, completed: 0 });
+            routines.forEach(r => {
+                if (r.category && categoryCompletionStats[r.category]) {
+                    categoryCompletionStats[r.category].total++;
+                    if (r.completed) { categoryCompletionStats[r.category].completed++; }
+                }
+            });
+            for (const cat in categoryCompletionStats) {
+                const stats = categoryCompletionStats[cat];
+                if (stats.total > 0) {
+                    const catRate = Math.round((stats.completed / stats.total) * 100);
+                    const statItem = document.createElement('div');
+                    statItem.className = 'dashboard-stat-item';
+                    statItem.innerHTML = `<strong>${catRate}%</strong><span>${cat} Completion</span>`;
+                    dashboardStatsContainer.appendChild(statItem);
+                }
+            }
+        }
+        function updateDashboardStats() {
+            const total = routines.length;
+            const completed = routines.filter(r => r.completed).length;
+            const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('dashboardTotalRoutines').textContent = total;
+            document.getElementById('dashboardCompletedRoutines').textContent = completed;
+            document.getElementById('dashboardSuccessRate').textContent = `${rate}%`;
+            document.getElementById('dashboardTotalStreaks').textContent = routines.reduce((sum, r) => sum + (r.streak || 0), 0);
+            const painDrillExposure = calculatePainDrillExposure();
+            const exposureRate = painDrillExposure.planned > 0 ? Math.round((painDrillExposure.completed / painDrillExposure.planned) * 100) : 0;
+            document.getElementById('dashboardPainDrillExposureRate').textContent = `${exposureRate}%`;
+            const dashboardStatsContainer = document.querySelector('#dashboard .dashboard-stats');
+            Array.from(dashboardStatsContainer.children).forEach(child => {
+                if (!child.classList.contains('dashboard-stat-item') || child.querySelector('span').id.startsWith('dashboardTotal') || child.querySelector('span').id.startsWith('dashboardPainDrill')) {
+                } else { child.remove(); }
+            });
+            const categoryCompletionStats = {};
+            categories.forEach(cat => categoryCompletionStats[cat] = { total: 0, completed: 0 });
+            routines.forEach(r => {
+                if (r.category && categoryCompletionStats[r.category]) {
+                    categoryCompletionStats[r.category].total++;
+                    if (r.completed) { categoryCompletionStats[r.category].completed++; }
+                }
+            });
+            for (const cat in categoryCompletionStats) {
+                const stats = categoryCompletionStats[cat];
+                if (stats.total > 0) {
+                    const catRate = Math.round((stats.completed / stats.total) * 100);
+                    const statItem = document.createElement('div');
+                    statItem.className = 'dashboard-stat-item';
+                    statItem.innerHTML = `<strong>${catRate}%</strong><span>${cat} Completion</span>`;
+                    dashboardStatsContainer.appendChild(statItem);
+                }
+            }
+            const dopamineTrigger = document.getElementById('dopamineTrigger');
+            if (rate >= 80) {
+                dopamineTrigger.textContent = "Outstanding! You're crushing your goals and building massive resilience!";
+                dopamineTrigger.style.background = 'linear-gradient(45deg, #4CAF50, #8BC34A)';
+            } else if (rate >= 50) {
+                dopamineTrigger.textContent = "Great progress! Keep pushing, every step counts!";
+                dopamineTrigger.style.background = 'linear-gradient(45deg, #FFC107, #FFEB3B)';
+            } else {
+                dopamineTrigger.textContent = "Start strong! Even one routine can change your day!";
+                dopamineTrigger.style.background = 'linear-gradient(45deg, #ff7e5f, #feb47b)';
+            }
+        }
+        function updateCategorySelect() {
+            const select = document.getElementById('routineCategory');
+            select.innerHTML = '<option value="">No Category</option>';
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            });
+        }
+        function updateCategoryList() {
+            const list = document.getElementById('categoryList');
+            list.innerHTML = categories.map(cat => `
+                <div class="category-tag">
+                    ${cat}
+                    <button class="delete-category" onclick="deleteCategory('${cat}')">×</button>
+                </div>
+            `).join('');
+        }
+        function renderRoutinesBySubTab(subTabId) {
+            const containerId = `${subTabId}-sub-tab-content`;
+            const routinesListElement = document.getElementById(`${subTabId}RoutinesList`);
+            routinesListElement.innerHTML = '';
+            const now = new Date();
+            const todayDayOfWeek = now.getDay();
+            const todayMonthDay = now.getDate();
+            let filteredRoutines = [];
+            if (subTabId === 'daily') {
+                filteredRoutines = routines.filter(r => r.resetFrequency === 'daily' && (!r.selectedDays || r.selectedDays.includes(todayDayOfWeek)) && r.category !== "Pain Drills");
+            } else if (subTabId === 'weekly') {
+                if (weeklyFilter === 'active-today') {
+                    filteredRoutines = routines.filter(r => r.resetFrequency === 'weekly' && (!r.selectedDays || r.selectedDays.includes(todayDayOfWeek)) && r.category !== "Pain Drills");
+                } else {
+                    filteredRoutines = routines.filter(r => r.resetFrequency === 'weekly' && r.category !== "Pain Drills");
+                }
+            } else if (subTabId === 'monthly') {
+                if (monthlyFilter === 'active-today') {
+                    filteredRoutines = routines.filter(r => r.resetFrequency === 'monthly' && (!r.selectedDays || r.selectedDays.includes(todayMonthDay)) && r.category !== "Pain Drills");
+                } else {
+                    filteredRoutines = routines.filter(r => r.resetFrequency === 'monthly' && r.category !== "Pain Drills");
+                }
+            } else if (subTabId === 'other') {
+                filteredRoutines = routines.filter(r => r.resetFrequency === 'manual' && r.category !== "Pain Drills");
+            }
+            if (filteredRoutines.length === 0) {
+                routinesListElement.innerHTML = `<div class="empty-state"><p>No ${subTabId} routines found for today.</p></div>`;
+            } else {
+                routinesListElement.innerHTML = filteredRoutines.map(routine => renderRoutineCard(routine)).join('');
+            }
+        }
+        function renderPainDrills() {
+            const painDrillsContainer = document.getElementById('painDrillsRoutines');
+            painDrillsContainer.innerHTML = '';
+            const now = new Date();
+            const todayDayOfWeek = now.getDay();
+            const todayMonthDay = now.getDate();
+            let filteredPainDrills = routines.filter(r => r.category === "Pain Drills");
+            if (painDrillsFilter === 'active-today') {
+                filteredPainDrills = filteredPainDrills.filter(r => {
+                    if (r.resetFrequency === "daily" && (!r.selectedDays || r.selectedDays.includes(todayDayOfWeek))) { return true; }
+                    else if (r.resetFrequency === "weekly" && (!r.selectedDays || r.selectedDays.includes(todayDayOfWeek))) { return true; }
+                    else if (r.resetFrequency === "monthly" && (!r.selectedDays || r.selectedDays.includes(todayMonthDay))) { return true; }
+                    else if (r.resetFrequency === "manual") { return true; } // Manual pain drills are always "active"
+                    return false;
+                });
+            }
+            if (filteredPainDrills.length === 0) {
+                painDrillsContainer.innerHTML = `<div class="empty-state"><p>No Pain Drills ${painDrillsFilter === 'active-today' ? 'active today' : 'found'}.</p></div>`;
+            } else {
+                painDrillsContainer.innerHTML = filteredPainDrills.map(routine => renderRoutineCard(routine)).join('');
+            }
+        }
+        function renderRoutineCard(routine) {
+            const completedSteps = routine.microSteps.filter(s => s.completed).length;
+            const totalSteps = routine.microSteps.length;
+            const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
+            const isRoutineCompleted = routine.completed;
+            const streakDisplay = routine.streak > 0 ? `<span class="routine-streak">🔥 ${routine.streak}</span>` : '';
+            const painTagDisplay = routine.painTag ? `<span style="font-size: 12px; color: #888; margin-left: 10px;">[Challenge: ${routine.painTag}]</span>` : '';
+            let timeDisplay = '';
+            if (routine.category === "Pain Drills") {
+                if (routine.resetFrequency === "daily") { timeDisplay = "Anytime (Trigger-based)"; }
+                else if (routine.resetFrequency === "weekly" && routine.selectedDays) {
+                    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                    timeDisplay = routine.selectedDays.map(day => dayNames[day]).join(', ');
+                } else if (routine.resetFrequency === "monthly" && routine.selectedDays) {
+                    timeDisplay = `Day ${routine.selectedDays.join(', ')} of month`;
+                } else { timeDisplay = routine.time ? formatTime(routine.time) : 'Anytime'; }
+            } else { timeDisplay = routine.time ? formatTime(routine.time) : 'Anytime'; }
+            return `
+                <div class="routine-card ${isRoutineCompleted ? 'completed' : ''}" data-routine-id="${routine.id}">
+                    <div class="routine-header">
+                        <div>
+                            <div class="routine-title">
+                                ${routine.title} ${streakDisplay} ${painTagDisplay}
+                                ${!isRoutineCompleted ? `<span class="edit-icon" onclick="editRoutineTitle(${routine.id})">✏️</span>` : ''}
+                            </div>
+                            <div class="routine-time">
+                                ${timeDisplay}
+                                ${!isRoutineCompleted && routine.time !== null && routine.category !== "Pain Drills" ? `<span class="edit-icon" onclick="editRoutineTime(${routine.id})">⏰</span>` : ''}
+                            </div>
+                            ${routine.category ? `<div class="routine-category">${routine.category}</div>` : ''}
+                        </div>
+                        <div class="routine-actions">
+                            ${isRoutineCompleted ? `<button class="reopen-btn" onclick="reopenRoutine(${routine.id})">Reopen</button>` : `<button class="three-dot-menu" onclick="toggleJournal(${routine.id})">⋯</button>`}
+                            <button class="complete-btn ${isRoutineCompleted ? 'completed' : ''}" onclick="toggleComplete(${routine.id})" ${isRoutineCompleted ? 'disabled' : ''}>
+                                ${isRoutineCompleted ? '✓' : ''}
+                            </button>
+                            <button class="delete-btn" onclick="deleteRoutine(${routine.id})" ${isRoutineCompleted ? 'disabled' : ''}>×</button>
+                        </div>
+                    </div>
+                    <div class="routine-description">${routine.description}</div>
+                    ${routine.microSteps.length > 0 ? `
+                        <div class="routine-progress">
+                            <div style="font-size: 12px; margin-bottom: 4px;">Progress: ${completedSteps}/${totalSteps} steps</div>
+                            <div class="routine-progress-bar"><div class="routine-progress-fill" style="width: ${progressPercent}%"></div></div>
+                        </div>
+                    ` : ''}
+                    ${routine.painTag ? `
+                        <div class="suds-input-group">
+                            <label>SUDS_pre (0-100)<input type="number" id="sudsPre-${routine.id}" min="0" max="100" value="${routine.sudsPre !== null ? routine.sudsPre : ''}" onchange="updateSuds(${routine.id}, 'sudsPre')" ${isRoutineCompleted ? 'readonly' : ''}></label>
+                            <label>SUDS_post (0-100)<input type="number" id="sudsPost-${routine.id}" min="0" max="100" value="${routine.sudsPost !== null ? routine.sudsPost : ''}" onchange="updateSuds(${routine.id}, 'sudsPost')" ${isRoutineCompleted ? 'readonly' : ''}></label>
+                            <label>Duration (min)<input type="number" id="duration-${routine.id}" min="0" value="${routine.duration !== null ? routine.duration : ''}" onchange="updateDuration(${routine.id})" ${isRoutineCompleted ? 'readonly' : ''}></label>
+                            <label>Reps<input type="number" id="reps-${routine.id}" min="0" value="${routine.reps !== null ? routine.reps : ''}" onchange="updateReps(${routine.id})" ${isRoutineCompleted ? 'readonly' : ''}></label>
+                        </div>
+                    ` : ''}
+                    <div class="micro-steps-container" id="microsteps-${routine.id}">
+                        <h4 style="margin-bottom: 10px; font-size: 14px;">Micro-steps:</h4>
+                        ${routine.microSteps.map((step, index) => `
+                            <div class="micro-step-item">
+                                <input type="checkbox" class="micro-step-checkbox" ${step.completed ? 'checked' : ''} onchange="toggleMicroStep(${routine.id}, ${index})" ${isRoutineCompleted ? 'disabled' : ''}>
+                                <span class="micro-step-text ${step.completed ? 'completed' : ''}">${step.text}</span>
+                                <div class="micro-step-actions"><button type="button" onclick="toggleMicroStepJournal(${routine.id}, ${index})" ${isRoutineCompleted ? 'disabled' : ''}>📝</button></div>
+                            </div>
+                            <div class="micro-step-journal-container" id="micro-step-notes-${routine.id}-${index}">
+                                <textarea id="micro-step-notes-textarea-${routine.id}-${index}" placeholder="Notes for this step..." oninput="updateMicroStepNotes(${routine.id}, ${index})" ${isRoutineCompleted ? 'readonly' : ''}>${step.notes || ''}</textarea>
+                            </div>
+                        `).join('')}
+                        ${!isRoutineCompleted ? `
+                            <div class="micro-step-edit-container">
+                                <button type="button" class="add-step-btn" onclick="addMicroStepToRoutine(${routine.id})">+ Add Step</button>
+                                ${routine.microSteps.length > 0 ? `
+                                    <div style="margin-top: 10px;">
+                                        ${routine.microSteps.map((step, index) => `
+                                            <div class="micro-step-edit-item">
+                                                <input type="text" value="${step.text}" onchange="updateMicroStepText(${routine.id}, ${index}, this.value)">
+                                                <button type="button" class="remove-step" onclick="removeMicroStepFromRoutine(${routine.id}, ${index})">×</button>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${enableMicroVariant && routine.microVariant ? `
+                        <div class="micro-variant-container" id="microvariant-${routine.id}">
+                            <h4 style="margin-bottom: 10px; font-size: 14px;">Micro-Variant (60-90s):</h4>
+                            <p>${routine.microVariant}</p>
+                        </div>
+                    ` : ''}
+                    <div class="journal-container" id="journal-${routine.id}">
+                        <h4 style="margin-bottom: 8px; font-size: 14px;">Notes:</h4>
+                        <textarea class="journal-textarea" id="notes-${routine.id}" placeholder="Add your thoughts, reflections, or notes..." oninput="saveJournal(${routine.id})" ${isRoutineCompleted ? 'readonly' : ''}>${routine.notes || ''}</textarea>
+                    </div>
+                </div>
+            `;
+        }
+        function calculatePainDrillExposure() {
+            const now = new Date();
+            const effectiveToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(effectiveToday.getDate() - 6);
+            sevenDaysAgo.setHours(0, 0, 0, 0);
+            const painDrillExposure = { planned: 0, completed: 0 };
+            for (let i = 0; i < 7; i++) {
+                const checkDate = new Date(sevenDaysAgo);
+                checkDate.setDate(sevenDaysAgo.getDate() + i);
+                const checkDayOfWeek = checkDate.getDay();
+                const checkMonthDay = checkDate.getDate();
+                const checkDateString = checkDate.toDateString();
+                let routinesForThisDay = [];
+                if (checkDateString === effectiveToday.toDateString()) { routinesForThisDay = routines; }
+                else {
+                    const historyEntry = history.find(h => h.date === checkDateString);
+                    if (historyEntry) { routinesForThisDay = historyEntry.routines; }
+                }
+                routinesForThisDay.forEach(r => {
+                    if (r.category === "Pain Drills") {
+                        let isPlannedForThisDay = false;
+                        if (r.resetFrequency === "daily" && (!r.selectedDays || r.selectedDays.includes(checkDayOfWeek))) { isPlannedForThisDay = true; }
+                        else if (r.resetFrequency === "weekly" && (!r.selectedDays || r.selectedDays.includes(checkDayOfWeek))) { isPlannedForThisDay = true; }
+                        else if (r.resetFrequency === "monthly" && (!r.selectedDays || r.selectedDays.includes(checkMonthDay))) { isPlannedForThisDay = true; }
+                        else if (r.resetFrequency === "manual") { isPlannedForThisDay = true; } // Manual pain drills are always "planned"
+                        if (isPlannedForThisDay) {
+                            painDrillExposure.planned++;
+                            if (r.completed) { painDrillExposure.completed++; }
+                        }
+                    }
+                });
+            }
+            return painDrillExposure;
+        }
+        function updateSudsTrendDashboard() {
+            const sudsTableBody = document.getElementById('sudsTrendTable').querySelector('tbody');
+            sudsTableBody.innerHTML = '';
+            const today = new Date();
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(today.getDate() - 7);
+            sevenDaysAgo.setHours(0, 0, 0, 0);
+            const relevantHistory = history.filter(h => new Date(h.date) >= sevenDaysAgo);
+            const allRelevantRoutines = [];
+            relevantHistory.forEach(h => allRelevantRoutines.push(...h.routines.map(r => ({ ...r, date: h.date }))));
+            routines.forEach(r => {
+                if (r.completed) { allRelevantRoutines.push({ ...r, date: today.toDateString() }); }
+            });
+            const challengeData = {};
+            for (const challenge in CHALLENGE_INTENSITIES) { challengeData[challenge] = { sudsPreSum: 0, sudsPostSum: 0, count: 0 }; }
+            allRelevantRoutines.forEach(r => {
+                if (r.painTag && CHALLENGE_INTENSITIES[r.painTag]) {
+                    if (r.sudsPre !== null && r.sudsPost !== null) {
+                        challengeData[r.painTag].sudsPreSum += r.sudsPre;
+                        challengeData[r.painTag].sudsPostSum += r.sudsPost;
+                        challengeData[r.painTag].count++;
+                    }
+                }
+            });
+            const top5Challenges = Object.entries(CHALLENGE_INTENSITIES).sort(([, intensityA], [, intensityB]) => intensityB - intensityA).slice(0, 5).map(([challenge]) => challenge);
+            top5Challenges.forEach(challenge => {
+                const data = challengeData[challenge];
+                if (data.count > 0) {
+                    const avgSudsPre = (data.sudsPreSum / data.count).toFixed(1);
+                    const avgSudsPost = (data.sudsPostSum / data.count).toFixed(1);
+                    const avgDrop = (avgSudsPre - avgSudsPost).toFixed(1);
+                    const row = sudsTableBody.insertRow();
+                    row.innerHTML = `<td>${challenge}</td><td>${avgSudsPre}</td><td>${avgSudsPost}</td><td>${avgDrop}</td><td>${data.count}</td>`;
+                } else {
+                    const row = sudsTableBody.insertRow();
+                    row.innerHTML = `<td>${challenge}</td><td colspan="4">No data yet</td>`;
+                }
+            });
+        }
+        function handleKeyboardShortcuts(event) {
+            if (!document.getElementById('today-routines').classList.contains('active')) { return; }
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.tagName === 'SELECT') { return; }
+            if (todaySubTab === 'rules') { return; }
+            const firstRoutineCard = document.querySelector(`#${todaySubTab}-sub-tab-content .routine-card`);
+            if (!firstRoutineCard) return;
+            const firstRoutineId = parseFloat(firstRoutineCard.dataset.routineId);
+            const routine = routines.find(r => r.id === firstRoutineId);
+            if (!routine) return;
+            switch (event.key) {
+                case ' ':
+                    event.preventDefault();
+                    if (!routine.completed) { toggleComplete(firstRoutineId); }
+                    break;
+                case 'Enter':
+                    event.preventDefault();
+                    toggleJournal(firstRoutineId);
+                    break;
+            }
+        }
+        function updateNextRoutineDisplay() {
+            const now = new Date();
+            const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes();
+            const uncompletedTimedRoutines = routines.filter(r => !r.completed && r.time);
+            if (uncompletedTimedRoutines.length === 0) {
+                document.getElementById('nextRoutineDisplay').textContent = 'No upcoming timed routines.';
+                return;
+            }
+            let nextRoutine = null;
+            let minTimeDiff = Infinity;
+            for (const r of uncompletedTimedRoutines) {
+                const [rHour, rMin] = r.time.split(':').map(Number);
+                const routineTimeInMinutes = rHour * 60 + rMin;
+                let timeDiff = routineTimeInMinutes - currentTimeInMinutes;
+                if (timeDiff < 0) { timeDiff += 24 * 60; }
+                if (timeDiff < minTimeDiff) {
+                    minTimeDiff = timeDiff;
+                    nextRoutine = r;
+                }
+            }
+            if (nextRoutine) {
+                const hours = Math.floor(minTimeDiff / 60);
+                const minutes = minTimeDiff % 60;
+                let timeString = '';
+                if (hours > 0) { timeString += `${hours} hr `; }
+                timeString += `${minutes} min`;
+                document.getElementById('nextRoutineDisplay').textContent = `Next: ${nextRoutine.title} in ${timeString}`;
+            } else {
+                document.getElementById('nextRoutineDisplay').textContent = 'No upcoming timed routines.';
+            }
+        }
+        function formatTime(time) {
+            if (!time) return '';
+            const [hours, minutes] = time.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+        function toggleDaysSelectorGroup() {
+            const resetFrequency = document.getElementById('resetFrequency').value;
+            const daysSelectorGroup = document.getElementById('daysSelectorGroup');
+            const daysSelector = document.getElementById('daysSelector');
+            if (resetFrequency === 'daily' || resetFrequency === 'weekly' || resetFrequency === 'monthly') {
+                daysSelectorGroup.style.display = 'block';
+                Array.from(daysSelector.querySelectorAll('input[type="checkbox"]')).forEach(cb => cb.checked = false);
+                if (resetFrequency === 'monthly') {
+                    daysSelector.innerHTML = '';
+                    for (let i = 1; i <= 31; i++) {
+                        daysSelector.innerHTML += `<div class="day-checkbox"><input type="checkbox" id="monthDay${i}" value="${i}"><label for="monthDay${i}">${i}</label></div>`;
+                    }
+                    daysSelector.style.gridTemplateColumns = 'repeat(auto-fit, minmax(40px, 1fr))';
+                } else {
+                    daysSelector.innerHTML = `
+                        <div class="day-checkbox"><input type="checkbox" id="day0" value="0"><label for="day0">Sun</label></div>
+                        <div class="day-checkbox"><input type="checkbox" id="day1" value="1"><label for="day1">Mon</label></div>
+                        <div class="day-checkbox"><input type="checkbox" id="day2" value="2"><label for="day2">Tue</label></div>
+                        <div class="day-checkbox"><input type="checkbox" id="day3" value="3"><label for="day3">Wed</label></div>
+                        <div class="day-checkbox"><input type="checkbox" id="day4" value="4"><label for="day4">Thu</label></div>
+                        <div class="day-checkbox"><input type="checkbox" id="day5" value="5"><label for="day5">Fri</label></div>
+                        <div class="day-checkbox"><input type="checkbox" id="day6" value="6"><label for="day6">Sat</label></div>
+                    `;
+                    daysSelector.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                }
+            } else {
+                daysSelectorGroup.style.display = 'none';
+                Array.from(daysSelector.querySelectorAll('input[type="checkbox"]')).forEach(cb => { cb.checked = false; });
+            }
+        }
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return weekNo;
+        }
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('journal-textarea') || e.target.classList.contains('micro-step-journal-container')) {
+                e.target.style.height = 'auto';
+                e.target.style.height = e.target.scrollHeight + 'px';
+            }
+        });
+        document.getElementById('newCategoryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCategory();
+            }
+        });
+        function addInitialData() {
+            if (routines.length === 0 && history.length === 0 && rules.length === 0) {
+                const initialCategories = [
+                    "Spiritual", "Health", "Creative", "Protection", "Social", "Legacy",
+                    "Recovery", "Systems", "Pain -> Dopamine", "Resilience", "Discipline",
+                    "Creation", "Service", "Problem Solving", "Leadership", "Career",
+                    "Family", "Finance", "Productivity", "Reputation", "Growth", "Visibility", "Integrity", "Vision", "Rehab",
+                    "Morning Power Hour", "Evening Wind Down", "Weekly Systems", "Pain Drills"
+                ];
+                initialCategories.forEach(cat => {
+                    if (!categories.includes(cat)) { categories.push(cat); }
+                });
+                const initialRules = [
+                    { id: 1, title: "Ho’oponopono", description: "Practice forgiveness and reconciliation. Trigger: negative emotion. Mentally repeat: 'I'm sorry, Please forgive me, Thank you, I love you.' for 2 minutes. Feel a shift in perspective." },
+                    { id: 2, title: "Adaptive Intensity Rule", description: "If SUDS for a routine does not drop by 15% in 4 weeks, escalate exposure frequency one step. If SUDS spikes >20% for 3 consecutive sessions, pause exposure, switch to micro-variant + 7-day recovery. If I experience panic, dissociation, or suicidal thoughts during conditioning, I STOP and contact a clinician immediately." },
+                    { id: 3, title: "30-Second Execution", description: "Execute small tasks immediately upon recognition. Identify a task that takes <30 seconds (e.g., send quick email, put away dish). Execute it immediately. Affirm: 'Momentum built.'" },
+                    { id: 4, title: "Reading People Practice", description: "Observe and interpret non-verbal cues. Pick 1 person daily. Note their posture, gestures, facial expressions (5 min). Formulate a hypothesis about their current state/intention." }
+                ];
+                rules.push(...initialRules);
+                const initialRoutines = [
+                    { title: "Goal Activation (RAS Programming)", time: "06:45", description: "Prime your Reticular Activating System for daily goals. 5 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Review top 3 goals for the day (1 min).", completed: false, notes: '' }, { text: "Visualize successful completion of each goal (3 min).", completed: false, notes: '' }, { text: "Affirm: 'My focus is sharp, my path is clear.' (1 min).", completed: false, notes: '' }], microVariant: "1-min: State top goal aloud 3 times. Visualize success.", duration: 5 },
+                    { title: "Gym", time: "07:00", description: "Physical conditioning. 45–60 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Warm-up (5 min).", completed: false, notes: '' }, { text: "Workout (35-50 min).", completed: false, notes: '' }, { text: "Cool-down/Stretch (5 min).", completed: false, notes: '' }], microVariant: "1-min: 20 jumping jacks. Say: 'I am strong.'", duration: 60 },
+                    { title: "Stretch", time: "08:00", description: "Full body mobility. 10 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Dynamic stretches (5 min).", completed: false, notes: '' }, { text: "Static stretches (5 min).", completed: false, notes: '' }], microVariant: "1-min: Touch toes 5 times. Say: 'My body is fluid.'", duration: 10 },
+                    { title: "Gratitude Practice", time: "08:10", description: "Cultivate appreciation. 10 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "List 5 things I am grateful for (5 min).", completed: false, notes: '' }, { text: "Feel the emotion of gratitude (5 min).", completed: false, notes: '' }], microVariant: "1-min: Name 3 things I'm grateful for. Smile.", duration: 10 },
+                    { title: "Deep Reading & Explanation", time: "08:30", description: "Absorb and articulate complex ideas. 15 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Read a challenging text (10 min).", completed: false, notes: '' }, { text: "Explain the core concept aloud as if to a child (5 min).", completed: false, notes: '' }], microVariant: "1-min: Read one paragraph. Summarize it in one sentence.", duration: 15 },
+                    { title: "Mindfulness Meditation", time: "08:45", description: "Center and focus the mind. 10 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Find a quiet space. Sit comfortably (1 min).", completed: false, notes: '' }, { text: "Focus on breath, observe thoughts without judgment (8 min).", completed: false, notes: '' }, { text: "Gently return to present (1 min).", completed: false, notes: '' }], microVariant: "1-min: Close eyes, take 3 deep breaths, notice 3 sounds.", duration: 10 },
+                    { title: "Idea Generation", time: "09:00", description: "Brainstorm new concepts or solutions. 10 min.", category: "Morning Power Hour", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Pick a problem or topic (1 min).", completed: false, notes: '' }, { text: "Generate 10-20 ideas, no filtering (8 min).", completed: false, notes: '' }, { text: "Select 1-2 promising ideas (1 min).", completed: false, notes: '' }], microVariant: "1-min: Write down 3 ideas for a current problem.", duration: 10 },
+                    { title: "Evening Reflection & Planning", time: "22:40", description: "Review day, plan tomorrow. 10 min.", category: "Evening Wind Down", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Review today's accomplishments and challenges (5 min).", completed: false, notes: '' }, { text: "Plan top 3 priorities for tomorrow (5 min).", completed: false, notes: '' }], microVariant: "1-min: List 1 win, 1 lesson, 1 task for tomorrow.", duration: 10 },
+                    { title: "Visualization Practice", time: "22:50", description: "Visualize future success and desired outcomes. 5 min.", category: "Evening Wind Down", painTag: "", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Relax and close eyes (1 min).", completed: false, notes: '' }, { text: "Vividly imagine a desired future outcome (4 min).", completed: false, notes: '' }], microVariant: "1-min: Visualize one goal achieved. Feel the emotion.", duration: 5 },
+                    { title: "Environment Design", time: "14:00", description: "Optimize physical and digital environment for productivity and well-being. 30 min.", category: "Weekly Systems", painTag: "", resetFrequency: "weekly", selectedDays: [0], microSteps: [{ text: "Declutter workspace (15 min).", completed: false, notes: '' }, { text: "Organize digital files/inbox (10 min).", completed: false, notes: '' }, { text: "Plan one environmental improvement for the week (5 min).", completed: false, notes: '' }], microVariant: "1-min: Clear desktop. Say: 'My space reflects my clarity.'", duration: 30 },
+                    { title: "Weekly System Building", time: "14:30", description: "Review and refine personal systems and workflows. 15 min.", category: "Weekly Systems", painTag: "", resetFrequency: "weekly", selectedDays: [0], microSteps: [{ text: "Review current systems (e.g., task management, learning) (10 min).", completed: false, notes: '' }, { text: "Identify one system to optimize or create (5 min).", completed: false, notes: '' }], microVariant: "1-min: Identify one bottleneck in my workflow. Brainstorm 1 solution.", duration: 15 },
+                    { title: "Family CEO Mode", time: "16:00", description: "Lead family dynamics with clarity and purpose. 60 min.", category: "Weekly Systems", painTag: "Family CEO Meeting", resetFrequency: "weekly", selectedDays: [0], microSteps: [{ text: "Review recent family interactions (10 min).", completed: false, notes: '' }, { text: "Identify one potential conflict point and a proactive solution (15 min).", completed: false, notes: '' }, { text: "Communicate with family member(s) with empathy and clear boundaries (30 min).", completed: false, notes: '' }, { text: "Plan one proactive act of family support (5 min).", completed: false, notes: '' }], microVariant: "1-min: Reflect on family harmony. Plan one positive family interaction. Say: 'I lead my family with strength and love.'", duration: 60 },
+                    { title: "Weekly Guilt to Gold (Remediation Protocol)", time: null, description: "Address guilt through amends and proactive virtue. Weekly.", category: "Weekly Systems", painTag: "Guilt to Gold", resetFrequency: "weekly", selectedDays: [5], microSteps: [{ text: "Identify a source of guilt/regret.", completed: false, notes: '' }, { text: "Plan one small act of amends or virtue.", completed: false, notes: '' }, { text: "Execute the act (e.g., apology, extra effort, donation).", completed: false, notes: '' }], microVariant: "1-min: Acknowledge regret. Plan one small act of kindness. Say: 'I act with integrity.'", duration: 15 },
+                    { title: "Weekly Betrayal/Injustice Journal", time: null, description: "Process past betrayals, channel energy into justice/integrity. Weekly.", category: "Weekly Systems", painTag: "Betrayal/Injustice", resetFrequency: "weekly", selectedDays: [1], microSteps: [{ text: "Journal 10 min on a past betrayal or injustice.", completed: false, notes: '' }, { text: "Identify 1 actionable step to uphold integrity or seek justice (e.g., set boundary, advocate).", completed: false, notes: '' }, { text: "Execute the step or plan its execution.", completed: false, notes: '' }], microVariant: "1-min: Recall a minor injustice. Affirm: 'I stand for truth.'", duration: 20 },
+                    { title: "Weekly Problem Assault (Frustration) Drill", time: null, description: "Direct frustration into aggressive problem-solving. Weekly.", category: "Weekly Systems", painTag: "Frustration with Problems", resetFrequency: "weekly", selectedDays: [2], microSteps: [{ text: "Identify a frustrating problem (work/personal).", completed: false, notes: '' }, { text: "Brainstorm 5 radical solutions in 10 min.", completed: false, notes: '' }, { text: "Select one and take a first micro-action.", completed: false, notes: '' }], microVariant: "1-min: Acknowledge frustration. Write 1 counter-intuitive solution. Say: 'I am the solution.'", duration: 20 },
+                    { title: "Weekly Leader’s Burden / Protection Log", time: null, description: "Reflect on leadership challenges, log acts of protection/service. Weekly.", category: "Weekly Systems", painTag: "Leader's Burden", resetFrequency: "weekly", selectedDays: [3], microSteps: [{ text: "Journal 10 min on a leadership decision or burden.", completed: false, notes: '' }, { text: "Log 3 instances where I protected my team/vision.", completed: false, notes: '' }, { text: "Plan one proactive act of team support.", completed: false, notes: '' }], microVariant: "1-min: Reflect on a leadership win. Affirm: 'I bear the weight, I forge the path.'", duration: 20 },
+                    { title: "Weekly Connection Offensive (Loneliness)", time: null, description: "Proactively build and strengthen social connections. Weekly.", category: "Weekly Systems", painTag: "Connection Offensive", resetFrequency: "weekly", selectedDays: [4], microSteps: [{ text: "Reach out to 3 people (text, call, email).", completed: false, notes: '' }, { text: "Plan one social interaction for the week.", completed: false, notes: '' }, { text: "Reflect on the value of connection.", completed: false, notes: '' }], microVariant: "1-min: Send a thoughtful message to one person. Say: 'I am connected, I am strong.'", duration: 20 },
+                    { title: "Wealth Ritual", time: null, description: "Strategic review and planning for financial growth. Daily $50 transfer + revenue action (Mon–Fri).", category: "Finance", painTag: "Wealth Ritual", resetFrequency: "daily", selectedDays: [1, 2, 3, 4, 5], microSteps: [{ text: "Transfer $50 to investment/savings account.", completed: false, notes: '' }, { text: "Take one action to generate revenue (e.g., send proposal, follow up lead).", completed: false, notes: '' }, { text: "Affirm: 'I am a master of resources.'", completed: false, notes: '' }], microVariant: "1-min: Check investment balance. Say: 'My wealth grows.'", },
+                    { title: "Focus Blocks (Deep Work)", time: null, description: "Dedicated time for heavy concentration and deep work. 2 deep work blocks Mon–Fri.", category: "Productivity", painTag: "Focus Blocks", resetFrequency: "daily", selectedDays: [1, 2, 3, 4, 5], microSteps: [{ text: "Schedule 2-hour uninterrupted deep work block.", completed: false, notes: '' }, { text: "Eliminate all distractions.", completed: false, notes: '' }, { text: "Execute deep work on a critical task.", completed: false, notes: '' }], microVariant: "1-min: Close all tabs. Focus on one task for 60 seconds. Say: 'My focus is a weapon.'", },
+                    { title: "Status Stack", time: null, description: "Proactive steps to enhance reputation and visibility. Daily proof, weekly collab, quarterly project.", category: "Reputation", painTag: "Status Stack", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Share one piece of 'proof' of work/progress (e.g., social media, team update).", completed: false, notes: '' }, { text: "Plan one weekly collaboration.", completed: false, notes: '' }, { text: "Review quarterly project progress.", completed: false, notes: '' }], microVariant: "1-min: Post one insightful comment on a professional platform. Say: 'My influence grows.'", },
+                    { title: "Creative Recovery Cycles", time: null, description: "Recharge creative energy and prevent burnout. 3 days ON / 1 day OFF cycle.", category: "Creative", painTag: "Creative Recovery", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Engage in a non-work creative activity (e.g., drawing, music, writing for pleasure) for 30 min.", completed: false, notes: '' }, { text: "Journal on creative insights.", completed: false, notes: '' }, { text: "Plan next creative project.", completed: false, notes: '' }], microVariant: "1-min: Doodle for 60 seconds. Say: 'My wellspring is infinite.'", },
+                    { title: "Envy → Energy Convert", time: null, description: "Transform envy into inspiration and actionable steps. 2–3x/week.", category: "Growth", painTag: "Envy -> Energy Convert", resetFrequency: "weekly", selectedDays: [1, 3, 5], microSteps: [{ text: "Identify a source of envy (e.g., someone's success).", completed: false, notes: '' }, { text: "Analyze their path: what actions did they take?", completed: false, notes: '' }, { text: "Identify one small, concrete action I can take towards a similar goal.", completed: false, notes: '' }], microVariant: "1-min: Acknowledge envy. Identify one skill they possess. Say: 'I learn, I build, I conquer.'", },
+                    { title: "Sensory Reset", time: null, description: "Daily 20-min silence + weekly nature walk.", category: "Recovery", painTag: "Sensory Reset", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Find a quiet space, no distractions (20 min).", completed: false, notes: '' }, { text: "Engage in a weekly nature walk (60 min).", completed: false, notes: '' }], microVariant: "1-min: Close eyes, listen to 3 distinct sounds. Say: 'I am present.'", },
+                    { title: "Shadow Integration", time: null, description: "Weekly journal + 2x outlets.", category: "Spiritual", painTag: "Shadow Integration", resetFrequency: "weekly", selectedDays: [0], microSteps: [{ text: "Journal on a 'shadow' aspect of self (e.g., anger, fear) (20 min).", completed: false, notes: '' }, { text: "Find two healthy outlets for this energy (e.g., intense workout, creative expression).", completed: false, notes: '' }], microVariant: "1-min: Acknowledge one 'negative' trait. Reframe it as a potential strength.", },
+                    { title: "Ethical Audit", time: null, description: "Review decisions for alignment with values. Monthly.", category: "Integrity", painTag: "Ethical Audit", resetFrequency: "monthly", selectedDays: [1], microSteps: [{ text: "Review key decisions from the past month (30 min).", completed: false, notes: '' }, { text: "Assess alignment with core values. Identify any discrepancies.", completed: false, notes: '' }, { text: "Plan corrective actions if needed.", completed: false, notes: '' }], microVariant: "1-min: Reflect on one recent decision. Ask: 'Was this aligned with my highest self?'", },
+                    { title: "Physical Pain Rehab (Week 1-4)", time: "06:00", description: "Daily 10-min mobility and gentle movement. Check pain level weekly.", category: "Rehab", painTag: "Physical Pain Rehab", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "5 min gentle stretching (neck, shoulders, hips).", completed: false, notes: '' }, { text: "5 min slow walking or stationary cycling.", completed: false, notes: '' }, { text: "Log current pain level (0-10). If pain increases >2 points for 3 days, consult therapist.", completed: false, notes: '' }], microVariant: "1-min: 3 deep breaths, 3 gentle neck rolls. Say: 'My body is my temple, I rebuild it stronger.'", },
+                    { title: "Physical Pain Rehab (Week 5-8)", time: "06:00", description: "Daily 10-min mobility + 3x/week light resistance. Check pain level weekly.", category: "Rehab", painTag: "Physical Pain Rehab", resetFrequency: "weekly", selectedDays: [1, 3, 5], microSteps: [{ text: "10 min mobility routine.", completed: false, notes: '' }, { text: "3 sets of 10 light resistance exercises (e.g., band rows, wall push-ups).", completed: false, notes: '' }, { text: "Log current pain level (0-10). If pain increases >2 points for 3 days, consult therapist.", completed: false, notes: '' }], microVariant: "1-min: 5 bodyweight squats. Say: 'My strength returns.'", },
+                    { title: "Physical Pain Rehab (Week 9-12)", time: "06:00", description: "Full movement integration. Daily mobility + 3x/week moderate resistance. Check pain level weekly.", category: "Rehab", painTag: "Physical Pain Rehab", resetFrequency: "weekly", selectedDays: [1, 3, 5], microSteps: [{ text: "10 min dynamic mobility.", completed: false, notes: '' }, { text: "3 sets of 10-12 moderate resistance exercises (e.g., dumbbells, bodyweight progressions).", completed: false, notes: '' }, { text: "15 min cardio (jogging, swimming).", completed: false, notes: '' }, { text: "Log current pain level (0-10). If pain increases >2 points for 3 days, consult therapist.", completed: false, notes: '' }], microVariant: "1-min: 10 jumping jacks. Say: 'I am a machine, finely tuned.'", },
+                    { title: "Risk Calibration", time: null, description: "Weekly review + monthly portfolio adjustment.", category: "Finance", painTag: "Risk Calibration", resetFrequency: "weekly", selectedDays: [0], microSteps: [{ text: "Review personal/financial risk exposure (15 min).", completed: false, notes: '' }, { text: "Identify one area to increase or decrease risk.", completed: false, notes: '' }, { text: "Adjust investment portfolio or personal strategy monthly.", completed: false, notes: '' }], microVariant: "1-min: Identify one comfort zone to step out of. Say: 'Fortune favors the bold.'", },
+                    { title: "Monthly Legacy Review", time: "08:00", description: "Review long-term goals, impact, and legacy. Adjust course.", category: "Vision", painTag: "Loss of meaning", resetFrequency: "monthly", selectedDays: [1], microSteps: [{ text: "Review my 1-year, 5-year, and legacy goals (30 min).", completed: false, notes: '' }, { text: "Identify 3 key achievements from the past month.", completed: false, notes: '' }, { text: "Adjust one strategic priority for the next month.", completed: false, notes: '' }], microVariant: "1-min: Read my personal mission statement. Say: 'My legacy is my blueprint.'", },
+                    { title: "Monthly Big-Exposure (Public Speaking/Post)", time: "14:00", description: "Plan and execute a significant public exposure event.", category: "Visibility", painTag: "Obscurity", resetFrequency: "monthly", selectedDays: [1], microSteps: [{ text: "Identify one public speaking opportunity or significant public post.", completed: false, notes: '' }, { text: "Prepare content and delivery (1 hour).", completed: false, notes: '' }, { text: "Execute the exposure. Log feedback.", completed: false, notes: '' }], microVariant: "1-min: Draft 3 bullet points for a public post. Say: 'My voice commands attention.'", },
+                    { title: "Insult / Disrespect", time: null, description: "Trigger: When insult/disrespect happens. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Insult/Disrespect", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "20 burpees (physical surge)", completed: false, notes: '' }, { text: "Log insult + ✅ streak", completed: false, notes: '' }, { text: "Publish proof of work (tweet, screenshot, code)", completed: false, notes: '' }, { text: "Sensory hit (sip or song)", completed: false, notes: '' }, { text: "Say: “I build while they talk.”", completed: false, notes: '' }], microVariant: "1-min: Read 3 harsh online comments. Breathe. Say: 'My worth is absolute.'", notes: "Identity: Convert insult → empire fuel." },
+                    { title: "Seduction Urge", time: null, description: "Trigger: Urge to scroll/watch sexual content. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Seduction Vulnerability", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Lock device or Cold Turkey blocker", completed: false, notes: '' }, { text: "30 pushups or cold shower", completed: false, notes: '' }, { text: "Redirect 45 min into skill session", completed: false, notes: '' }, { text: "Share proof with accountability partner", completed: false, notes: '' }, { text: "Say: “Discipline over dopamine.”", completed: false, notes: '' }], microVariant: "1-min: Open distracting app, immediately close. Say: 'I am the master of my attention.'", notes: "Identity: Discipline over dopamine." },
+                    { title: "Romantic / Love Pain", time: null, description: "Trigger: Feeling longing or heartbreak. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Romantic/Love Pain", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Sit with feeling for 60s", completed: false, notes: '' }, { text: "Write “What would the man she respects do now?”", completed: false, notes: '' }, { text: "Do hardest 60–90 min work block", completed: false, notes: '' }, { text: "Share progress screenshot", completed: false, notes: '' }, { text: "Say: “Excellence is my love language.”", completed: false, notes: '' }], microVariant: "1-min: Journal 3 sentences on romantic feeling. Redirect to 1 work task. Say: 'I build my empire.'", notes: "Identity: Excellence is my love language." },
+                    { title: "Rejection", time: null, description: "Trigger: Hearing “no” or being ignored. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Rejection", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Log rejection as “trophy”", completed: false, notes: '' }, { text: "20 pushups", completed: false, notes: '' }, { text: "Send another bold ask", completed: false, notes: '' }, { text: "✅ Streak mark", completed: false, notes: '' }, { text: "Say: “Rejection is data.”", completed: false, notes: '' }], microVariant: "1-min: Ask a silly question to a stranger. Accept the 'no'. Say: 'I grow stronger with every 'no'.'", notes: "Identity: Rejection is data." },
+                    { title: "Death / Loss Fear", time: null, description: "Trigger: Thoughts of mortality or loss. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Death/Loss Fear", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "5-min mortality meditation", completed: false, notes: '' }, { text: "Write 3 unsaid things", completed: false, notes: '' }, { text: "Message/call one person", completed: false, notes: '' }, { text: "Add one legacy action to tomorrow", completed: false, notes: '' }, { text: "Say: “I live like tomorrow isn’t promised.”", completed: false, notes: '' }], microVariant: "1-min: Write down one thing you'd regret not doing. Say: 'Carpe Diem.'", notes: "Identity: I live like tomorrow isn’t promised." },
+                    { title: "Shame", time: null, description: "Trigger: Feeling small, guilty, or embarrassed. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Shame", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Write shame trigger", completed: false, notes: '' }, { text: "Find someone with same struggle", completed: false, notes: '' }, { text: "Share tip/content to help them", completed: false, notes: '' }, { text: "✅ Log “1 person helped”", completed: false, notes: '' }, { text: "Say: “My wounds serve others.”", completed: false, notes: '' }], microVariant: "1-min: Acknowledge shame. Send one encouraging text. Say: 'My actions define me now.'", notes: "Identity: My wounds serve others." },
+                    { title: "Wasting Time for Others", time: null, description: "Trigger: Doing task for others that feels draining. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Wasting Time for Others", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Pause 30s → ask “Does this serve my mission?”", completed: false, notes: '' }, { text: "If no → say “No” firmly", completed: false, notes: '' }, { text: "✅ Log boundary win", completed: false, notes: '' }, { text: "Small treat (sip/song)", completed: false, notes: '' }, { text: "Say: “My time builds my destiny.”", completed: false, notes: '' }], microVariant: "1-min: Spend 30s on a low-value request. Say: 'My boundaries are strong.'", notes: "Identity: My time builds my destiny." },
+                    { title: "Boredom", time: null, description: "Trigger: Idle, urge to scroll or waste time. Do one deliberate exposure per day + on-call.", category: "Pain Drills", painTag: "Boredom", resetFrequency: "daily", selectedDays: [0, 1, 2, 3, 4, 5, 6], microSteps: [{ text: "Feel boredom for 60s", completed: false, notes: '' }, { text: "Set 25-min timer → hardest task", completed: false, notes: '' }, { text: "If still bored → 100 burpees", completed: false, notes: '' }, { text: "✅ Log what was built", completed: false, notes: '' }, { text: "Say: “Boredom means build.”", completed: false, notes: '' }], microVariant: "1-min: Acknowledge boredom. Write down 1 new idea. Say: 'I am a creator, not a consumer.'", notes: "Identity: Boredom means build." },
+                    { title: "Betrayal / Injustice", time: null, description: "Trigger: Feeling betrayed or witnessing injustice.", category: "Pain Drills", painTag: "Betrayal/Injustice", resetFrequency: "weekly", selectedDays: [1], microSteps: [{ text: "Journal 10 min on a past betrayal or injustice.", completed: false, notes: '' }, { text: "Identify 1 actionable step to uphold integrity or seek justice (e.g., set boundary, advocate).", completed: false, notes: '' }, { text: "Execute the step or plan its execution.", completed: false, notes: '' }], microVariant: "1-min: Recall a minor injustice. Affirm: 'I stand for truth.'", notes: "Identity: I stand for truth." },
+                    { title: "Frustration with Problems", time: null, description: "Trigger: Encountering a frustrating problem.", category: "Pain Drills", painTag: "Frustration with Problems", resetFrequency: "weekly", selectedDays: [2], microSteps: [{ text: "Identify a frustrating problem (work/personal).", completed: false, notes: '' }, { text: "Brainstorm 5 radical solutions in 10 min.", completed: false, notes: '' }, { text: "Select one and take a first micro-action.", completed: false, notes: '' }], microVariant: "1-min: Acknowledge frustration. Write 1 counter-intuitive solution. Say: 'I am the solution.'", notes: "Identity: I am the solution." },
+                    { title: "Leadership Loneliness", time: null, description: "Trigger: Feeling isolated or burdened by leadership.", category: "Pain Drills", painTag: "Leader's Burden", resetFrequency: "weekly", selectedDays: [3], microSteps: [{ text: "Journal 10 min on a leadership decision or burden.", completed: false, notes: '' }, { text: "Log 3 instances where I protected my team/vision.", completed: false, notes: '' }, { text: "Plan one proactive act of team support.", completed: false, notes: '' }], microVariant: "1-min: Reflect on a leadership win. Affirm: 'I bear the weight, I forge the path.'", notes: "Identity: I bear the weight, I forge the path." },
+                    { title: "Connection Offensive", time: null, description: "Trigger: Feeling disconnected or lonely.", category: "Pain Drills", painTag: "Connection Offensive", resetFrequency: "weekly", selectedDays: [4], microSteps: [{ text: "Reach out to 3 people (text, call, email).", completed: false, notes: '' }, { text: "Plan one social interaction for the week.", completed: false, notes: '' }, { text: "Reflect on the value of connection.", completed: false, notes: '' }], microVariant: "1-min: Send a thoughtful message to one person. Say: 'I am connected, I am strong.'", notes: "Identity: I am connected, I am strong." },
+                    { title: "Guilt → Gold", time: null, description: "Trigger: Feeling guilt or regret.", category: "Pain Drills", painTag: "Guilt to Gold", resetFrequency: "weekly", selectedDays: [5], microSteps: [{ text: "Identify a source of guilt/regret.", completed: false, notes: '' }, { text: "Plan one small act of amends or virtue.", completed: false, notes: '' }, { text: "Execute the act (e.g., apology, extra effort, donation).", completed: false, notes: '' }], microVariant: "1-min: Acknowledge regret. Plan one small act of kindness. Say: 'I act with integrity.'", notes: "Identity: I act with integrity." },
+                    { title: "Family CEO Mode", time: null, description: "Trigger: Family conflict or need for leadership.", category: "Pain Drills", painTag: "Family CEO Meeting", resetFrequency: "weekly", selectedDays: [0], microSteps: [{ text: "Review recent family interactions (10 min).", completed: false, notes: '' }, { text: "Identify one potential conflict point and a proactive solution.", completed: false, notes: '' }, { text: "Communicate with family member(s) with empathy and clear boundaries.", completed: false, notes: '' }], microVariant: "1-min: Reflect on family harmony. Plan one positive family interaction. Say: 'I lead my family with strength and love.'", notes: "Identity: I lead my family with strength and love." }
+                ];
+                initialRoutines.forEach(r => {
+                    if (r.category && !categories.includes(r.category)) { categories.push(r.category); }
+                    routines.push(r);
+                });
+                routines.sort((a, b) => {
+                    if (!a.time && !b.time) return 0;
+                    if (!a.time) return 1;
+                    if (!b.time) return -1;
+                    return a.time.localeCompare(b.time);
+                });
+                pushState();
+                saveData();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('show');
+            updateMobileCompletedList();
+        }
+
+        function updateMobileCompletedList() {
+            const list = document.getElementById('mobile-completed-list');
+            const completedRoutines = routines.filter(r => r.completed);
+            list.innerHTML = completedRoutines.length > 0
+                ? completedRoutines.slice(0, 5).map(r => `<div class="completed-task-item">• ${r.title}</div>`).join('')
+                : '<div class="completed-task-item">No completed tasks yet</div>';
+            updateMobileStats();
+        }
+
+        function updateMobileStats() {
+            const total = routines.length;
+            const completed = routines.filter(r => r.completed).length;
+            const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const totalStreaks = routines.reduce((sum, r) => sum + (r.streak || 0), 0);
+
+            document.getElementById('mobile-progress-rate').textContent = `${rate}%`;
+            document.getElementById('mobile-completed-count').textContent = completed;
+            document.getElementById('mobile-streak-count').textContent = totalStreaks;
+        }
+
+        function triggerDopamineSpike() {
+            // Show confetti
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            for (let i = 0; i < 50; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.animationDelay = Math.random() * 3 + 's';
+                confettiContainer.appendChild(piece);
+            }
+            document.body.appendChild(confettiContainer);
+            setTimeout(() => {
+                document.body.removeChild(confettiContainer);
+            }, 3000);
+
+            // Show notification
+            showNotification('Dopamine spike! You crushed it! 🚀', 'success', 3000);
+
+            // Add streak pulse if streak > 0
+            const streakElements = document.querySelectorAll('.routine-streak');
+            streakElements.forEach(el => {
+                el.classList.add('streak-pulse');
+                setTimeout(() => el.classList.remove('streak-pulse'), 500);
+            });
+        }
+    </script>
+</body>
+</html>

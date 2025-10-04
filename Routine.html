@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔥 Resilience Training - Dopamine Edition</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b6b, #ff8e53, #ffd93d);
+            --success-gradient: linear-gradient(135deg, #00d2ff, #3a7bd5, #00d2ff);
+            --danger-gradient: linear-gradient(135deg, #ff4757, #ff3838);
+            --gold-gradient: linear-gradient(135deg, #ffd700, #ffed4e);
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
+            background: var(--primary-gradient); 
+            min-height: 100vh; 
+            color: #333; 
+            font-size: 16px; 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(58, 123, 213, 0.3) 0%, transparent 50%);
+            animation: floatingGradient 20s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes floatingGradient {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -20px) rotate(120deg); }
+            66% { transform: translate(20px, -20px) rotate(240deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Mobile first approach */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 0;
+                padding-top: 60px;
+            }
+        }
+
+        /* Fixed mobile header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--primary-gradient);
+            z-index: 1000;
+            padding: 10px 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .mobile-title {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulseText 2s ease infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hamburger {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 2px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: calc(100vh - 60px);
+                border-radius: 0 20px 20px 0;
+                z-index: 999;
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+        }
+
+        .sidebar h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ffecb3, #ffd700);
+            color: #ff6b6b;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .nav-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        .nav-button.active {
+            background: var(--primary-gradient);
+            color: white;
+            animation: activeButton 0.5s ease;
+        }
+
+        @keyframes activeButton {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(15px);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin: 10px;
+                border-radius: 20px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dopamine trigger elements */
+        .dopamine-banner {
+            background: var(--gold-gradient);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+            animation: dopaminePulse 2s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dopamine-banner::before {
+            content: '⚡';
+            position: absolute;
+            font-size: 40px;
+            left: -50px;
+            animation: slideAcross 3s linear infinite;
+        }
+
+        @keyframes slideAcross {
+            to { left: calc(100% + 50px); }
+        }
+
+        @keyframes dopaminePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6); }
+        }
+
+        /* Enhanced routine cards */
+        .routine-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .routine-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .routine-card:hover::before {
+            left: 100%;
+        }
+
+        .routine-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #ffd700;
+        }
+
+        .routine-card.completed {
+            background: var(--success-gradient);
+            color: white;
+            animation: completedPop 0.5s ease;
+        }
+
+        @keyframes completedPop {
+            0% { transform: scale(0.95) rotate(-2deg); }
+            50% { transform: scale(1.05) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        /* Enhanced buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '✨';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Progress visualization */
+        .progress-bar {
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Streak display */
+        .streak-badge {
+            display: inline-block;
+            background: var(--gold-gradient);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: streakGlow 2s ease infinite;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
+        }
+
+        @keyframes streakGlow {
+            0%, 100% { box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 2px 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* Notification system */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 15px;
+            background: var(--success-gradient);
+            color: white;
+            font-weight: bold;
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.5s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            animation: notificationBounce 0.5s ease;
+        }
+
+        @keyframes notificationBounce {
+            0% { transform: translateX(400px); }
+            60% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Confetti animation */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3000;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            animation: confettiFall 3s linear;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile overlay menu */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 60px);
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Quick action button */
+        .quick-action-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            z-index: 100;
+            transition: all 0.3s ease;
+            animation: floatButton 3s ease infinite;
+        }
+
+        @keyframes floatButton {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .quick-action-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 768px) {
+            .quick-action-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+            }
+        }
+
+        /* Achievement popup */
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            z-index: 3001;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: transform 0.5s ease;
+        }
+
+        .achievement-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+            animation: achievementCelebrate 0.5s ease;
+        }
+
+        @keyframes achievementCelebrate {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+            50% { transform: translate(-50%, -50%) scale(1.1) rotate(10deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        }
+
+        .achievement-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .achievement-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .achievement-message {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Mobile-friendly form elements */
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffecb3;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Touch-friendly spacing */
+        @media (max-width: 768px) {
+            .nav-button {
+                min-height: 50px;
+            }
+            
+            .routine-card {
+                padding: 15px;
+            }
+            
+            input, textarea, select {
+                min-height: 44px;
+            }
+        }
+
+        /* Daily sub-tabs */
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #ffecb3;
+            color: #ff6b6b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sub-tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .sub-tab-content {
+            display: none;
+        }
+
+        .sub-tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* Three-dot menu */
+        .three-dot-menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .three-dot-menu:hover {
+            background: rgba(0,0,0,0.1);
+            color: #333;
+        }
+
+        /* Expanded journal section */
+        .journal-expanded {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ffecb3;
+            animation: expandDown 0.3s ease;
+        }
+
+        .journal-expanded.show {
+            display: block;
+        }
+
+        @keyframes expandDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Micro-steps */
+        .micro-steps {
+            margin: 15px 0;
+        }
+
+        .micro-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .micro-step.completed {
+            background: #e8f5e8;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .micro-step-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .micro-step-text {
+            flex: 1;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .micro-step-text:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .micro-step-text.editing {
+            background: #fff3cd;
+            border: 1px solid #ffd700;
+        }
+
+        .micro-step-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .micro-step-notes-btn {
+            font-size: 12px;
+            padding: 2px 6px;
+            background: #ffecb3;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ff6b6b;
+        }
+
+        .micro-step-remove {
+            font-size: 12px;
+            padding: 2px 6px;
+            background: #ffe0e0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #d00;
+        }
+
+        /* Notes section */
+        .notes-section {
+            margin: 15px 0;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 2px solid #ffecb3;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Inline editing */
+        .inline-edit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inline-input {
+            flex: 1;
+            padding: 4px 8px;
+            border: 1px solid #ffd700;
+            border-radius: 4px;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        .edit-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            padding: 2px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ff6b6b;
+        }
+
+        /* Reopen button */
+        .reopen-btn {
+            background: var(--success-gradient);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .reopen-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Micro-step progress bar */
+        .micro-progress {
+            margin: 10px 0;
+        }
+
+        .micro-progress-bar {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .micro-progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .micro-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: microShimmer 2s infinite;
+        }
+
+        @keyframes microShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Add micro-step input */
+        .add-micro-step {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .add-micro-step input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid #ffecb3;
+            border-radius: 4px;
+        }
+
+        .add-micro-step button {
+            padding: 6px 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Mobile adjustments for new elements */
+        @media (max-width: 768px) {
+            .micro-step {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .micro-step-actions {
+                align-self: flex-end;
+            }
+
+            .inline-edit {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .inline-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="mobile-title">🔥 Resilience Training</div>
+        <div class="hamburger" id="hamburgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Achievement Popup -->
+    <div id="achievementPopup" class="achievement-popup">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-title">Achievement Unlocked!</div>
+        <div class="achievement-message" id="achievementMessage">You're crushing it!</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <h1>🚀 Resilience Hub</h1>
+            <ul class="nav-menu">
+                <li><button class="nav-button active" data-tab="today">📅 Today's Mission</button></li>
+                <li><button class="nav-button" data-tab="add">➕ Add Routine</button></li>
+                <li><button class="nav-button" data-tab="dashboard">📊 Dashboard</button></li>
+                <li><button class="nav-button" data-tab="history">📜 History</button></li>
+                <li><button class="nav-button" data-tab="shop">🛒 Shop</button></li>
+                <li><button class="nav-button" data-tab="settings">⚙️ Settings</button></li>
+            </ul>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px; font-size: 14px; color: #666;">
+                <div>Completed: <span id="completedCount" style="color: #ff6b6b; font-weight: bold;">0</span>/<span id="totalCount">0</span></div>
+                <div>Streaks: <span id="totalStreaks" style="color: #ffd700; font-weight: bold;">0</span> 🔥</div>
+                <div>Points: <span id="pointsDisplay" style="color: #ffd700; font-weight: bold;">0</span> ⭐</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Today's Mission Tab -->
+            <div id="today" class="tab-content active">
+                <h2 style="margin-bottom: 20px;">Today's Mission 🎯</h2>
+                
+                <div class="dopamine-banner">
+                    Complete routines to unlock your POWER! 💪
+                </div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="rules">📋 Rules</button>
+                    <button class="sub-tab-btn" data-subtab="daily">☀️ DAILY</button>
+                    <button class="sub-tab-btn" data-subtab="weekly">📅 WEEKLY</button>
+                    <button class="sub-tab-btn" data-subtab="monthly">📆 MONTHLY</button>
+                    <button class="sub-tab-btn" data-subtab="special">⭐ special</button>
+                </div>
+
+                <div id="rules-content" class="sub-tab-content active">
+                    <div id="rulesList"></div>
+                </div>
+
+                <div id="daily-content" class="sub-tab-content">
+                    <div id="dailyRoutinesList"></div>
+                </div>
+
+                <div id="weekly-content" class="sub-tab-content">
+                    <div id="weeklyRoutinesList"></div>
+                </div>
+
+                <div id="monthly-content" class="sub-tab-content">
+                    <div id="monthlyRoutinesList"></div>
+                </div>
+
+                <div id="special-content" class="sub-tab-content">
+                    <div id="specialRoutinesList"></div>
+                </div>
+            </div>
+
+            <!-- Add Routine Tab -->
+            <div id="add" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Add New Routine ✨</h2>
+                
+                <form id="addRoutineForm">
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Title *</label>
+                        <input type="text" id="routineTitle" required placeholder="Give it an epic name...">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Time (Optional)</label>
+                        <input type="time" id="routineTime">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Description *</label>
+                        <textarea id="routineDescription" rows="3" required placeholder="What's the mission?"></textarea>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Organize</label>
+                        <div>
+                            <label><input type="radio" name="organize" value="daily" checked> Daily</label><br>
+                            <label><input type="radio" name="organize" value="weekly"> Weekly</label><br>
+                            <label><input type="radio" name="organize" value="monthly"> Monthly</label><br>
+                            <label><input type="radio" name="organize" value="special"> Special</label>
+                        </div>
+                    </div>
+
+                    <div id="customResetOptions" style="margin-bottom: 15px; display: none;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Custom Reset Time</label>
+                        <input type="time" id="customResetTime" value="00:00">
+                        <div id="weeklyOptions" style="display: none;">
+                            <label style="font-weight: bold; margin-bottom: 5px; display: block;">Reset Day</label>
+                            <select id="customResetDay">
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                                <option value="6">Saturday</option>
+                                <option value="0">Sunday</option>
+                            </select>
+                        </div>
+                        <div id="monthlyOptions" style="display: none;">
+                            <label style="font-weight: bold; margin-bottom: 5px; display: block;">Reset Date</label>
+                            <select id="customResetDate">
+                                <option value="1">1st</option>
+                                <option value="2">2nd</option>
+                                <option value="3">3rd</option>
+                                <option value="4">4th</option>
+                                <option value="5">5th</option>
+                                <option value="6">6th</option>
+                                <option value="7">7th</option>
+                                <option value="8">8th</option>
+                                <option value="9">9th</option>
+                                <option value="10">10th</option>
+                                <option value="11">11th</option>
+                                <option value="12">12th</option>
+                                <option value="13">13th</option>
+                                <option value="14">14th</option>
+                                <option value="15">15th</option>
+                                <option value="16">16th</option>
+                                <option value="17">17th</option>
+                                <option value="18">18th</option>
+                                <option value="19">19th</option>
+                                <option value="20">20th</option>
+                                <option value="21">21st</option>
+                                <option value="22">22nd</option>
+                                <option value="23">23rd</option>
+                                <option value="24">24th</option>
+                                <option value="25">25th</option>
+                                <option value="26">26th</option>
+                                <option value="27">27th</option>
+                                <option value="28">28th</option>
+                                <option value="29">29th</option>
+                                <option value="30">30th</option>
+                                <option value="31">31st</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Micro-Steps (Optional - one per line)</label>
+                        <textarea id="routineMicroSteps" rows="4" placeholder="Break down your routine into smaller steps...&#10;e.g.&#10;Step 1: Prepare materials&#10;Step 2: Start the task&#10;Step 3: Complete and review"></textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Reset Frequency</label>
+                        <select id="resetFrequency">
+                            <option value="manual">Manual</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary">🚀 Add Routine</button>
+                </form>
+
+                <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #ffecb3;">
+                    <h3 style="margin-bottom: 15px;">Add New Rule 📜</h3>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Rule Title *</label>
+                        <input type="text" id="ruleTitle" placeholder="Name your rule...">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; margin-bottom: 5px; display: block;">Description *</label>
+                        <textarea id="ruleDescription" rows="3" placeholder="What's the rule about?"></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" id="addRuleBtn">📋 Add Rule</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Performance Dashboard 📊</h2>
+                
+                <div class="dopamine-banner" id="dashboardBanner">
+                    Loading your epic stats...
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 32px; font-weight: bold; color: #4CAF50;" id="dashCompleted">0</div>
+                        <div style="color: #999; margin-top: 5px;">Completed</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 32px; font-weight: bold; color: #ffd700;" id="dashSuccessRate">0%</div>
+                        <div style="color: #999; margin-top: 5px;">Success Rate</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 32px; font-weight: bold; color: #3a7bd5;" id="dashTotalStreaks">0</div>
+                        <div style="color: #999; margin-top: 5px;">Total Streaks</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="history" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Your Journey 📜</h2>
+                <div id="historyContent"></div>
+            </div>
+
+            <!-- Shop Tab -->
+            <div id="shop" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Shop 🛒</h2>
+                <div>Your Points: <span id="shopPoints">0</span> ⭐</div>
+                <div id="shopItems"></div>
+                <h3>Add Custom Item</h3>
+                <input id="customItemName" placeholder="Item name">
+                <input id="customItemPrice" type="number" placeholder="Price">
+                <button onclick="addCustomItem()">Add Item</button>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Settings ⚙️</h2>
+                
+                <div style="background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 15px;">Data Management</h3>
+                    <button class="btn-primary" id="exportBtn">📤 Export Data</button>
+                    <button class="btn-primary" id="importBtn" style="background: linear-gradient(135deg, #3a7bd5, #00d2ff);">📥 Import Data</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+                
+                <div style="background: #ffe0e0; padding: 20px; border-radius: 15px;">
+                    <h3 style="margin-bottom: 15px; color: #d00;">Danger Zone</h3>
+                    <button class="btn-primary" id="clearDataBtn" style="background: var(--danger-gradient);">🗑️ Clear All Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action Button -->
+    <button class="quick-action-btn" id="quickActionBtn">➕</button>
+
+    <script>
+        // Data storage
+        let routines = [];
+        let rules = [];
+        let history = [];
+        let categories = ['Morning', 'Evening', 'Weekly', 'Daily', 'Other'];
+        let currentSubTab = 'rules';
+        let points = 0;
+        let shopItems = [];
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            initializeEventListeners();
+            updateDisplay();
+            checkDailyReset();
+        });
+
+        // Event Listeners
+        function initializeEventListeners() {
+            // Mobile menu
+            document.getElementById('hamburgerBtn').addEventListener('click', toggleMobileMenu);
+            document.getElementById('mobileOverlay').addEventListener('click', closeMobileMenu);
+
+            // Navigation
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Sub-tabs
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchSubTab(this.dataset.subtab);
+                });
+            });
+
+            // Forms
+            document.getElementById('addRoutineForm').addEventListener('submit', addRoutine);
+            document.getElementById('addRuleBtn').addEventListener('click', addRule);
+
+            // Organize radio buttons
+            document.querySelectorAll('input[name="organize"]').forEach(radio => {
+                radio.addEventListener('change', updateCustomOptions);
+            });
+
+            // Quick action
+            document.getElementById('quickActionBtn').addEventListener('click', function() {
+                switchTab('add');
+                showNotification('Let\'s add a new routine! 🚀', 'success');
+            });
+
+            // Settings
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            document.getElementById('importBtn').addEventListener('click', function() {
+                document.getElementById('importFile').click();
+            });
+            document.getElementById('importFile').addEventListener('change', importData);
+            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+        }
+
+        // Update custom options
+        function updateCustomOptions() {
+            const organize = document.querySelector('input[name="organize"]:checked').value;
+            const options = document.getElementById('customResetOptions');
+            const weekly = document.getElementById('weeklyOptions');
+            const monthly = document.getElementById('monthlyOptions');
+            if (organize === 'daily' || organize === 'weekly' || organize === 'monthly') {
+                options.style.display = 'block';
+                weekly.style.display = organize === 'weekly' ? 'block' : 'none';
+                monthly.style.display = organize === 'monthly' ? 'block' : 'none';
+            } else {
+                options.style.display = 'none';
+            }
+        }
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            const hamburger = document.getElementById('hamburgerBtn');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            const hamburger = document.getElementById('hamburgerBtn');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+
+        // Tab switching
+        function switchTab(tabId) {
+            // Update buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            
+            // Close mobile menu
+            closeMobileMenu();
+            
+            // Special handling for different tabs
+            if (tabId === 'dashboard') {
+                updateDashboard();
+            } else if (tabId === 'history') {
+                renderHistory();
+            }
+        }
+
+        // Sub-tab switching
+        function switchSubTab(subTabId) {
+            currentSubTab = subTabId;
+
+            // Update buttons
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.subtab === subTabId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update content
+            document.querySelectorAll('.sub-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${subTabId}-content`).classList.add('active');
+
+            // Render appropriate content
+            renderSubTabContent(subTabId);
+        }
+
+        // Render sub-tab content
+        function renderSubTabContent(subTabId) {
+            switch(subTabId) {
+                case 'rules':
+                    renderRules();
+                    break;
+                case 'daily':
+                    renderDailyRoutines();
+                    break;
+                case 'weekly':
+                    renderWeeklyRoutines();
+                    break;
+                case 'monthly':
+                    renderMonthlyRoutines();
+                    break;
+                case 'special':
+                    renderSpecialRoutines();
+                    break;
+            }
+        }
+
+
+
+        // Render functions
+        function renderRules() {
+            const container = document.getElementById('rulesList');
+            if (rules.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No rules yet</h3><p>Add your first rule to get started!</p></div>';
+                return;
+            }
+            
+            container.innerHTML = rules.map(rule => `
+                <div class="routine-card">
+                    <h3 style="color: #ff6b6b; margin-bottom: 10px;">${rule.title}</h3>
+                    <p>${rule.description}</p>
+                    <button onclick="deleteRule('${rule.id}')" style="background: var(--danger-gradient); color: white; border: none; padding: 8px 15px; border-radius: 10px; margin-top: 10px; cursor: pointer;">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderRoutineCard(routine) {
+            const isCompleted = routine.completed || false;
+            const streak = routine.streak || 0;
+            const microSteps = routine.microSteps || [];
+            const completedSteps = microSteps.filter(step => step.completed).length;
+            const progressPercent = microSteps.length > 0 ? Math.round((completedSteps / microSteps.length) * 100) : 0;
+
+            const microStepsHtml = microSteps.map((step, index) => `
+                <div class="micro-step ${step.completed ? 'completed' : ''}">
+                    <input type="checkbox" class="micro-step-checkbox" ${step.completed ? 'checked' : ''} onclick="toggleMicroStep('${routine.id}', ${index})">
+                    <span class="micro-step-text" onclick="editMicroStepText('${routine.id}', ${index})">${step.text}</span>
+                    <div class="micro-step-actions">
+                        <button class="micro-step-notes-btn" onclick="toggleMicroStepNotes('${routine.id}', ${index})">📝</button>
+                        <button class="micro-step-remove" onclick="removeMicroStepFromRoutine('${routine.id}', ${index})">✕</button>
+                    </div>
+                    ${step.notes ? `<div class="micro-step-notes" style="margin-top: 5px; padding: 5px; background: #f0f8ff; border-radius: 4px; font-size: 12px; display: none;">${step.notes}</div>` : ''}
+                </div>
+            `).join('');
+
+            return `
+                <div class="routine-card ${isCompleted ? 'completed' : ''}" style="position: relative;">
+                    <div class="three-dot-menu" onclick="toggleJournal('${routine.id}')">⋯</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div class="inline-edit">
+                            <h3 style="margin: 0;">${routine.title}</h3>
+                            <button class="edit-btn" onclick="editRoutineTitle('${routine.id}')">✏️</button>
+                            ${streak > 0 ? `<span class="streak-badge">🔥 ${streak}</span>` : ''}
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            ${isCompleted ? `<button class="reopen-btn" onclick="reopenRoutine('${routine.id}')">Reopen</button>` : ''}
+                            <button onclick="toggleComplete('${routine.id}')" style="background: ${isCompleted ? '#4CAF50' : '#ddd'}; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 18px;">
+                                ${isCompleted ? '✓' : ''}
+                            </button>
+                        </div>
+                    </div>
+                    <p style="margin: 10px 0;">${routine.description}</p>
+                    ${routine.time ? `<div class="inline-edit" style="margin: 5px 0;"><span style="font-size: 14px; color: #666;">⏰ ${formatTime(routine.time)}</span><button class="edit-btn" onclick="editRoutineTime('${routine.id}')">✏️</button></div>` : ''}
+                    ${routine.category ? `<span style="background: #ffecb3; color: #ff6b6b; padding: 5px 10px; border-radius: 10px; font-size: 12px;">${routine.category}</span>` : ''}
+                    ${microSteps.length > 0 ? `
+                        <div class="micro-progress">
+                            <div class="micro-progress-bar">
+                                <div class="micro-progress-fill" style="width: ${progressPercent}%"></div>
+                            </div>
+                            <div style="text-align: center; font-size: 12px; color: #666; margin-top: 5px;">${completedSteps}/${microSteps.length} steps (${progressPercent}%)</div>
+                        </div>
+                    ` : ''}
+                    <div style="margin-top: 15px;">
+                        <button onclick="deleteRoutine('${routine.id}')" style="background: var(--danger-gradient); color: white; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer;">Delete</button>
+                    </div>
+
+                    <div class="journal-expanded" id="journal-${routine.id}">
+                        ${microSteps.length > 0 ? `<div class="micro-steps">${microStepsHtml}</div>` : ''}
+                        <div class="add-micro-step">
+                            <input type="text" id="new-step-${routine.id}" placeholder="Add new micro-step..." onkeypress="if(event.key === 'Enter') addMicroStepToRoutine('${routine.id}')">
+                            <button onclick="addMicroStepToRoutine('${routine.id}')">Add</button>
+                        </div>
+                        <div class="notes-section">
+                            <label style="font-weight: bold; font-size: 14px;">Notes:</label>
+                            <textarea class="notes-textarea" id="notes-${routine.id}" placeholder="Add your thoughts, reflections, or additional details..." oninput="saveJournal('${routine.id}')">${routine.notes || ''}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+
+
+        function renderDailyRoutines() {
+            const container = document.getElementById('dailyRoutinesList');
+            const dailyRoutines = routines.filter(r => r.resetFrequency === 'daily');
+
+            if (dailyRoutines.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No daily routines yet</h3><p>Add daily routines to build consistency!</p></div>';
+                return;
+            }
+
+            container.innerHTML = dailyRoutines.map(routine => renderRoutineCard(routine)).join('');
+        }
+
+        function renderWeeklyRoutines() {
+            const container = document.getElementById('weeklyRoutinesList');
+            const weeklyRoutines = routines.filter(r => r.resetFrequency === 'weekly');
+
+            if (weeklyRoutines.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No weekly routines yet</h3><p>Add weekly routines for bigger goals!</p></div>';
+                return;
+            }
+
+            container.innerHTML = weeklyRoutines.map(routine => renderRoutineCard(routine)).join('');
+        }
+
+        function renderMonthlyRoutines() {
+            const container = document.getElementById('monthlyRoutinesList');
+            const monthlyRoutines = routines.filter(r => r.resetFrequency === 'monthly');
+
+            if (monthlyRoutines.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No monthly routines yet</h3><p>Add monthly routines for long-term goals!</p></div>';
+                return;
+            }
+
+            container.innerHTML = monthlyRoutines.map(routine => renderRoutineCard(routine)).join('');
+        }
+
+        function renderSpecialRoutines() {
+            const container = document.getElementById('specialRoutinesList');
+            const specialRoutines = routines.filter(r => r.category === 'special');
+
+            if (specialRoutines.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No special routines yet</h3><p>Add special routines here!</p></div>';
+                return;
+            }
+
+            container.innerHTML = specialRoutines.map(routine => renderRoutineCard(routine)).join('');
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyContent');
+
+            if (history.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No history yet</h3><p>Complete routines to build your history!</p></div>';
+                return;
+            }
+
+            container.innerHTML = history.slice(0, 7).map(day => `
+                <div class="routine-card">
+                    <h3>${new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>
+                    <p>Completed: ${day.routines.filter(r => r.completed).length}/${day.routines.length}</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(day.routines.filter(r => r.completed).length / day.routines.length * 100)}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderShop() {
+            const container = document.getElementById('shopItems');
+            container.innerHTML = shopItems.map((item, index) => `
+                <div style="background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>${item.name} - ${item.price} ⭐</div>
+                    <button onclick="buyItem(${index})" class="btn-primary" style="padding: 8px 15px;">Buy</button>
+                </div>
+            `).join('');
+            document.getElementById('shopPoints').textContent = points;
+        }
+
+        function buyItem(index) {
+            if (points >= shopItems[index].price) {
+                points -= shopItems[index].price;
+                updateDisplay();
+                renderShop();
+                showNotification('Bought ' + shopItems[index].name + '!', 'success');
+            } else {
+                showNotification('Not enough points!', 'error');
+            }
+        }
+
+        function addCustomItem() {
+            const name = document.getElementById('customItemName').value.trim();
+            const price = parseInt(document.getElementById('customItemPrice').value);
+            if (name && price > 0) {
+                shopItems.push({name, price});
+                saveData();
+                renderShop();
+                document.getElementById('customItemName').value = '';
+                document.getElementById('customItemPrice').value = '';
+                showNotification('Custom item added!', 'success');
+            }
+        }
+
+        // Add routine
+        function addRoutine(e) {
+            e.preventDefault();
+
+            // Parse micro-steps
+            const microStepsText = document.getElementById('routineMicroSteps').value.trim();
+            const microSteps = microStepsText ? microStepsText.split('\n').filter(step => step.trim()).map(step => ({
+                text: step.trim(),
+                completed: false,
+                notes: ''
+            })) : [];
+
+            const organize = document.querySelector('input[name="organize"]:checked').value;
+            let resetFrequency = 'manual';
+            if (organize === 'daily') resetFrequency = 'daily';
+            else if (organize === 'weekly') resetFrequency = 'weekly';
+            else if (organize === 'monthly') resetFrequency = 'monthly';
+
+            const customResetTime = document.getElementById('customResetTime').value || '00:00';
+            const customResetDay = document.getElementById('customResetDay').value;
+            const customResetDate = document.getElementById('customResetDate').value;
+
+            const routine = {
+                id: Date.now().toString(),
+                title: document.getElementById('routineTitle').value,
+                time: document.getElementById('routineTime').value,
+                description: document.getElementById('routineDescription').value,
+                category: organize,
+                resetFrequency: resetFrequency,
+                customResetTime: customResetTime,
+                customResetDay: organize === 'weekly' ? customResetDay : null,
+                customResetDate: organize === 'monthly' ? customResetDate : null,
+                completed: false,
+                streak: 0,
+                createdAt: new Date().toISOString(),
+                microSteps: microSteps,
+                notes: ''
+            };
+
+            routines.push(routine);
+            saveData();
+            updateDisplay();
+
+            // Reset form
+            e.target.reset();
+
+            // Show success
+            showNotification('Routine added! You\'re building something amazing! 🎉', 'success');
+            triggerConfetti();
+
+            // Switch to today tab
+            switchTab('today');
+        }
+
+        // Add rule
+        function addRule() {
+            const title = document.getElementById('ruleTitle').value;
+            const description = document.getElementById('ruleDescription').value;
+            
+            if (!title || !description) {
+                showNotification('Please fill in all fields!', 'error');
+                return;
+            }
+            
+            const rule = {
+                id: Date.now().toString(),
+                title: title,
+                description: description
+            };
+            
+            rules.push(rule);
+            saveData();
+            
+            // Clear inputs
+            document.getElementById('ruleTitle').value = '';
+            document.getElementById('ruleDescription').value = '';
+            
+            showNotification('Rule added! Stay disciplined! 💪', 'success');
+            renderRules();
+        }
+
+        // Toggle routine completion
+        function toggleComplete(id) {
+            const routine = routines.find(r => r.id === id);
+            if (!routine) return;
+
+            routine.completed = !routine.completed;
+
+            if (routine.completed) {
+                routine.streak = (routine.streak || 0) + 1;
+                points += 10;
+
+                // Trigger dopamine rewards
+                showNotification(`Crushed it! Streak: ${routine.streak} 🔥 +10 points`, 'success');
+                triggerConfetti();
+
+                // Check for achievements
+                checkAchievements();
+            } else {
+                routine.streak = Math.max(0, (routine.streak || 0) - 1);
+                points -= 5;
+            }
+
+            saveData();
+            updateDisplay();
+            renderSubTabContent(currentSubTab);
+        }
+
+        // Delete functions
+        function deleteRoutine(id) {
+            if (!confirm('Are you sure you want to delete this routine?')) return;
+            
+            routines = routines.filter(r => r.id !== id);
+            saveData();
+            updateDisplay();
+            renderSubTabContent(currentSubTab);
+            showNotification('Routine deleted', 'error');
+        }
+
+        function deleteRule(id) {
+            if (!confirm('Are you sure you want to delete this rule?')) return;
+            
+            rules = rules.filter(r => r.id !== id);
+            saveData();
+            renderRules();
+            showNotification('Rule deleted', 'error');
+        }
+
+        // Update display
+        function updateDisplay() {
+            const total = routines.length;
+            const completed = routines.filter(r => r.completed).length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const totalStreaks = routines.reduce((sum, r) => sum + (r.streak || 0), 0);
+
+            // Calculate micro-steps progress
+            const allMicroSteps = routines.flatMap(r => r.microSteps || []);
+            const completedMicroSteps = allMicroSteps.filter(step => step.completed).length;
+            const microStepsPercentage = allMicroSteps.length > 0 ? Math.round((completedMicroSteps / allMicroSteps.length) * 100) : 0;
+
+            document.getElementById('progressFill').style.width = `${Math.max(percentage, microStepsPercentage)}%`;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('totalStreaks').textContent = totalStreaks;
+            document.getElementById('pointsDisplay').textContent = points;
+
+            // Update dopamine banner based on progress
+            const banner = document.querySelector('.dopamine-banner');
+            const overallProgress = Math.max(percentage, microStepsPercentage);
+            if (overallProgress >= 80) {
+                banner.textContent = '🔥 UNSTOPPABLE! You\'re on FIRE! 🔥';
+                banner.style.background = 'var(--gold-gradient)';
+            } else if (overallProgress >= 50) {
+                banner.textContent = '💪 Great progress! Keep pushing! 💪';
+                banner.style.background = 'linear-gradient(135deg, #4CAF50, #8BC34A)';
+            } else {
+                banner.textContent = 'Complete routines to unlock your POWER! 💪';
+            }
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            const total = routines.length;
+            const completed = routines.filter(r => r.completed).length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const totalStreaks = routines.reduce((sum, r) => sum + (r.streak || 0), 0);
+
+            // Micro-steps stats
+            const allMicroSteps = routines.flatMap(r => r.microSteps || []);
+            const completedMicroSteps = allMicroSteps.filter(step => step.completed).length;
+            const microStepsPercentage = allMicroSteps.length > 0 ? Math.round((completedMicroSteps / allMicroSteps.length) * 100) : 0;
+
+            document.getElementById('dashTotalRoutines').textContent = total;
+            document.getElementById('dashCompleted').textContent = completed;
+            document.getElementById('dashSuccessRate').textContent = `${percentage}%`;
+            document.getElementById('dashTotalStreaks').textContent = totalStreaks;
+
+            // Update dashboard banner
+            const overallProgress = Math.max(percentage, microStepsPercentage);
+            const dashBanner = document.getElementById('dashboardBanner');
+            if (overallProgress >= 80) {
+                dashBanner.textContent = `🏆 LEGENDARY! ${overallProgress}% Success Rate! 🏆`;
+            } else if (overallProgress >= 50) {
+                dashBanner.textContent = `⭐ Amazing! ${overallProgress}% Success Rate! Keep it up! ⭐`;
+            } else {
+                dashBanner.textContent = `📈 Current Success Rate: ${overallProgress}% - Room to grow! 📈`;
+            }
+        }
+
+        // Check achievements
+        function checkAchievements() {
+            const completed = routines.filter(r => r.completed).length;
+            const total = routines.length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            let achievement = null;
+            
+            if (completed === 1 && total === 1) {
+                achievement = { title: 'First Step!', message: 'You\'ve started your journey!' };
+            } else if (completed === 5) {
+                achievement = { title: 'High Five!', message: 'You\'ve completed 5 routines!' };
+            } else if (completed === 10) {
+                achievement = { title: 'Perfect 10!', message: 'Double digits! Amazing!' };
+            } else if (percentage === 100 && total >= 5) {
+                achievement = { title: 'Perfect Day!', message: '100% completion! You\'re unstoppable!' };
+            }
+            
+            if (achievement) {
+                showAchievement(achievement.title, achievement.message);
+            }
+        }
+
+        // Show achievement popup
+        function showAchievement(title, message) {
+            const popup = document.getElementById('achievementPopup');
+            document.querySelector('.achievement-title').textContent = title;
+            document.getElementById('achievementMessage').textContent = message;
+            
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.background = type === 'success' ? 'var(--success-gradient)' : 'var(--danger-gradient)';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Confetti effect
+        function triggerConfetti() {
+            const container = document.createElement('div');
+            container.className = 'confetti-container';
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = ['#ff6b6b', '#ffd700', '#4CAF50', '#3a7bd5', '#ff8e53'][Math.floor(Math.random() * 5)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                container.appendChild(confetti);
+            }
+            
+            document.body.appendChild(container);
+            
+            setTimeout(() => {
+                document.body.removeChild(container);
+            }, 3000);
+        }
+
+        // Data management
+        function saveData() {
+            const data = {
+                routines: routines,
+                rules: rules,
+                history: history,
+                categories: categories,
+                points: points,
+                shopItems: shopItems,
+                lastSaved: new Date().toISOString()
+            };
+            localStorage.setItem('resilienceTrainingData', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('resilienceTrainingData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                routines = (data.routines || []).map(routine => ({
+                    ...routine,
+                    microSteps: routine.microSteps || [],
+                    notes: routine.notes || '',
+                    customResetTime: routine.customResetTime || '00:00',
+                    customResetDay: routine.customResetDay || null,
+                    customResetDate: routine.customResetDate || null
+                }));
+                rules = data.rules || [];
+                history = data.history || [];
+                categories = data.categories || categories;
+                points = data.points || 0;
+                shopItems = data.shopItems || [{name: 'Motivational Poster', price: 50}, {name: 'Extra Life', price: 100}];
+            }
+        }
+
+        function checkDailyReset() {
+            const today = new Date();
+            const lastAccessStr = localStorage.getItem('lastAccessDate');
+            const lastAccess = lastAccessStr ? new Date(lastAccessStr) : null;
+
+            if (lastAccess) {
+                const todayStr = today.toDateString();
+                const lastAccessStrDate = lastAccess.toDateString();
+
+                if (lastAccessStrDate !== todayStr) {
+                    // Save yesterday's data to history
+                    const yesterdayData = {
+                        date: lastAccessStrDate,
+                        routines: [...routines]
+                    };
+                    history.unshift(yesterdayData);
+                    if (history.length > 30) history.pop(); // Keep only 30 days
+
+                    // Reset daily routines
+                    routines.forEach(r => {
+                        if (r.resetFrequency === 'daily') {
+                            if (!r.completed) points -= 5;
+                            r.completed = false;
+                            if (r.microSteps) r.microSteps.forEach(step => step.completed = false);
+                        }
+                    });
+                }
+
+                // Weekly reset - custom day 12am
+                if (today.getDay() === parseInt(r.customResetDay || 1) && lastAccess.getDay() !== parseInt(r.customResetDay || 1)) {
+                    routines.forEach(r => {
+                        if (r.resetFrequency === 'weekly') {
+                            if (!r.completed) points -= 5;
+                            r.completed = false;
+                            if (r.microSteps) r.microSteps.forEach(step => step.completed = false);
+                        }
+                    });
+                }
+
+                // Monthly reset - custom date 12am
+                if (today.getDate() === parseInt(r.customResetDate || 1) && lastAccess.getDate() !== parseInt(r.customResetDate || 1)) {
+                    routines.forEach(r => {
+                        if (r.resetFrequency === 'monthly') {
+                            if (!r.completed) points -= 5;
+                            r.completed = false;
+                            if (r.microSteps) r.microSteps.forEach(step => step.completed = false);
+                        }
+                    });
+                    // Remove special routines
+                    routines = routines.filter(r => r.category !== 'special');
+                }
+
+                saveData();
+            }
+
+            localStorage.setItem('lastAccessDate', today.toISOString());
+        }
+
+        function exportData() {
+            const data = {
+                routines: routines,
+                rules: rules,
+                history: history,
+                categories: categories,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `resilience-training-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully! 📤', 'success');
+        }
+
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    routines = data.routines || [];
+                    rules = data.rules || [];
+                    history = data.history || [];
+                    categories = data.categories || categories;
+                    
+                    saveData();
+                    updateDisplay();
+                    renderSubTabContent(currentSubTab);
+                    
+                    showNotification('Data imported successfully! 📥', 'success');
+                } catch (error) {
+                    showNotification('Error importing data!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllData() {
+            if (!confirm('Are you sure you want to clear ALL data? This cannot be undone!')) return;
+            if (!confirm('Really sure? All your progress will be lost!')) return;
+            
+            routines = [];
+            rules = [];
+            history = [];
+            saveData();
+            updateDisplay();
+            renderSubTabContent(currentSubTab);
+            
+            showNotification('All data cleared!', 'error');
+        }
+
+        // New interactive functions
+        function toggleJournal(id) {
+            const journal = document.getElementById(`journal-${id}`);
+            journal.classList.toggle('show');
+        }
+
+        function addMicroStepToRoutine(routineId) {
+            const input = document.getElementById(`new-step-${routineId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const routine = routines.find(r => r.id === routineId);
+            if (!routine) return;
+
+            routine.microSteps = routine.microSteps || [];
+            routine.microSteps.push({
+                text: text,
+                completed: false,
+                notes: ''
+            });
+
+            input.value = '';
+            saveData();
+            renderSubTabContent(currentSubTab);
+        }
+
+        function removeMicroStepFromRoutine(routineId, stepIndex) {
+            const routine = routines.find(r => r.id === routineId);
+            if (!routine || !routine.microSteps || !routine.microSteps[stepIndex]) return;
+
+            routine.microSteps.splice(stepIndex, 1);
+            saveData();
+            renderSubTabContent(currentSubTab);
+        }
+
+        function toggleMicroStep(routineId, stepIndex) {
+            const routine = routines.find(r => r.id === routineId);
+            if (!routine || !routine.microSteps || !routine.microSteps[stepIndex]) return;
+
+            routine.microSteps[stepIndex].completed = !routine.microSteps[stepIndex].completed;
+            saveData();
+            renderSubTabContent(currentSubTab);
+        }
+
+        function editMicroStepText(routineId, stepIndex) {
+            const routine = routines.find(r => r.id === routineId);
+            if (!routine || !routine.microSteps || !routine.microSteps[stepIndex]) return;
+
+            const step = routine.microSteps[stepIndex];
+            const currentText = step.text;
+
+            // Create inline input
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'inline-input';
+            input.style.width = '100%';
+
+            // Replace text with input
+            const textSpan = event.target;
+            textSpan.parentNode.replaceChild(input, textSpan);
+
+            input.focus();
+            input.select();
+
+            const saveEdit = () => {
+                const newText = input.value.trim();
+                if (newText && newText !== currentText) {
+                    step.text = newText;
+                    saveData();
+                }
+                // Replace input back with span
+                input.parentNode.replaceChild(textSpan, input);
+                textSpan.textContent = step.text;
+                renderSubTabContent(currentSubTab);
+            };
+
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    saveEdit();
+                } else if (e.key === 'Escape') {
+                    input.parentNode.replaceChild(textSpan, input);
+                }
+            });
+        }
+
+        function toggleMicroStepNotes(routineId, stepIndex) {
+            const routine = routines.find(r => r.id === routineId);
+            if (!routine || !routine.microSteps || !routine.microSteps[stepIndex]) return;
+
+            const step = routine.microSteps[stepIndex];
+            const notesDiv = event.target.parentNode.nextElementSibling;
+
+            if (notesDiv) {
+                if (notesDiv.style.display === 'none' || !notesDiv.style.display) {
+                    notesDiv.style.display = 'block';
+                } else {
+                    notesDiv.style.display = 'none';
+                }
+            } else {
+                // Create notes input if doesn't exist
+                const notesInput = document.createElement('textarea');
+                notesInput.className = 'notes-textarea';
+                notesInput.placeholder = 'Add notes for this step...';
+                notesInput.value = step.notes || '';
+                notesInput.style.fontSize = '12px';
+                notesInput.style.minHeight = '40px';
+
+                event.target.parentNode.parentNode.appendChild(notesInput);
+
+                notesInput.addEventListener('input', () => {
+                    step.notes = notesInput.value;
+                    saveData();
+                });
+
+                notesInput.focus();
+            }
+        }
+
+        function editRoutineTitle(id) {
+            const routine = routines.find(r => r.id === id);
+            if (!routine) return;
+
+            const titleElement = event.target.previousElementSibling;
+            const currentTitle = routine.title;
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentTitle;
+            input.className = 'inline-input';
+
+            titleElement.parentNode.replaceChild(input, titleElement);
+
+            input.focus();
+            input.select();
+
+            const saveEdit = () => {
+                const newTitle = input.value.trim();
+                if (newTitle && newTitle !== currentTitle) {
+                    routine.title = newTitle;
+                    saveData();
+                }
+                input.parentNode.replaceChild(titleElement, input);
+                titleElement.textContent = routine.title;
+            };
+
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') saveEdit();
+                else if (e.key === 'Escape') {
+                    input.parentNode.replaceChild(titleElement, input);
+                }
+            });
+        }
+
+        function editRoutineTime(id) {
+            const routine = routines.find(r => r.id === id);
+            if (!routine) return;
+
+            const timeElement = event.target.previousElementSibling;
+            const currentTime = routine.time;
+
+            const input = document.createElement('input');
+            input.type = 'time';
+            input.value = currentTime || '';
+            input.className = 'inline-input';
+
+            timeElement.parentNode.replaceChild(input, timeElement);
+
+            input.focus();
+
+            const saveEdit = () => {
+                const newTime = input.value;
+                routine.time = newTime;
+                saveData();
+                input.parentNode.replaceChild(timeElement, input);
+                timeElement.textContent = `⏰ ${formatTime(routine.time)}`;
+            };
+
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('change', saveEdit);
+        }
+
+        function reopenRoutine(id) {
+            const routine = routines.find(r => r.id === id);
+            if (!routine) return;
+
+            routine.completed = false;
+            // Reset micro-steps if needed
+            if (routine.microSteps) {
+                routine.microSteps.forEach(step => step.completed = false);
+            }
+            saveData();
+            renderSubTabContent(currentSubTab);
+            showNotification('Routine reopened! Ready to tackle it again! 🔄', 'success');
+        }
+
+        function saveJournal(id) {
+            const routine = routines.find(r => r.id === id);
+            if (!routine) return;
+
+            const notesTextarea = document.getElementById(`notes-${id}`);
+            routine.notes = notesTextarea.value;
+            saveData();
+        }
+
+        // Auto-save with debouncing
+        let saveTimeout;
+        function debouncedSave(id) {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => saveJournal(id), 500);
+        }
+
+        // Update notes textarea to use debounced save
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('notes-textarea')) {
+                const id = e.target.id.replace('notes-', '');
+                debouncedSave(id);
+            }
+        });
+
+        // Utility functions
+        function formatTime(time) {
+            if (!time) return '';
+            const [hours, minutes] = time.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const displayHour = h % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+    </script>
+</body>
+</html>
